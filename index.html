@@ -1055,17 +1055,34 @@ Sii preciso e professionale. Se l'immagine non mostra chiaramente un pneumatico,
     const raw = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
 
     let result;
-    try {
-      const cleaned = raw.replace(/```json|```/g, '').trim();
-      result = JSON.parse(cleaned);
-    } catch {
-      const match = raw.match(/\{[\s\S]*\}/);
-      if (match) {
-        result = JSON.parse(match[0]);
-      } else {
-        throw new Error('Risposta AI non parsabile');
-      }
-    }
+
+try {
+  let cleaned = raw
+    .replace(/```json/g, '')
+    .replace(/```/g, '')
+    .replace(/\n/g, ' ')
+    .trim();
+
+  // trova JSON dentro qualsiasi testo
+  const match = cleaned.match(/\{[\s\S]*\}/);
+
+  if (!match) throw new Error('No JSON found');
+
+  let jsonString = match[0];
+
+  // fix AI comuni
+  jsonString = jsonString
+    .replace(/,\s*}/g, '}')   // trailing comma
+    .replace(/,\s*]/g, ']');
+
+  result = JSON.parse(jsonString);
+
+} catch (e) {
+  console.error("RAW AI RESPONSE:", raw);
+
+  throw new Error('Risposta AI non parsabile');
+}
+  }
 
     state.analysisResult = {
       ...result,
