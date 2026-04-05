@@ -1,0 +1,24 @@
+{
+  "name": "TireCheck Pro",
+  "short_name": "TireCheck",
+  "description": "Diagnosi pneumatici AI per officina",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0d0d0d",
+  "theme_color": "#e8ff47",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' fill='%230d0d0d'/%3E%3Ccircle cx='96' cy='96' r='70' fill='none' stroke='%23e8ff47' stroke-width='12'/%3E%3Ccircle cx='96' cy='96' r='28' fill='%23e8ff47'/%3E%3C/svg%3E",
+      "sizes": "192x192",
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' fill='%230d0d0d'/%3E%3Ccircle cx='256' cy='256' r='190' fill='none' stroke='%23e8ff47' stroke-width='28'/%3E%3Ccircle cx='256' cy='256' r='70' fill='%23e8ff47'/%3E%3C/svg%3E",
+      "sizes": "512x512",
+      "type": "image/svg+xml"
+    }
+  ],
+  "categories": ["productivity", "utilities"],
+  "screenshots": []
+}
