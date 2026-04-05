@@ -1,33 +1,44 @@
-const CACHE_NAME = 'tirecheck-pro-v1';
+const CACHE_NAME = 'tirecheck-pro-v2';
 const ASSETS = [
+  './',
   './index.html',
   './manifest.json'
 ];
 
-self.addEventListener('install', e => {
-  e.waitUntil(
+self.addEventListener('install', event => {
+  event.waitUntil(
     caches.open(CACHE_NAME).then(cache => cache.addAll(ASSETS))
   );
   self.skipWaiting();
 });
 
-self.addEventListener('activate', e => {
-  e.waitUntil(
+self.addEventListener('activate', event => {
+  event.waitUntil(
     caches.keys().then(keys =>
-      Promise.all(keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k)))
+      Promise.all(
+        keys
+          .filter(key => key !== CACHE_NAME)
+          .map(key => caches.delete(key))
+      )
     )
   );
   self.clients.claim();
 });
 
-self.addEventListener('fetch', e => {
-  // Gemini API e Make.com: sempre rete
-  if (e.request.url.includes('generativelanguage.googleapis.com') ||
-      e.request.url.includes('hook.') ||
-      e.request.url.includes('make.com')) {
+self.addEventListener('fetch', event => {
+  const url = event.request.url;
+
+  if (
+    url.includes('generativelanguage.googleapis.com') ||
+    url.includes('hook.') ||
+    url.includes('make.com')
+  ) {
     return;
   }
-  e.respondWith(
-    caches.match(e.request).then(cached => cached || fetch(e.request))
+
+  event.respondWith(
+    caches.match(event.request).then(cached => {
+      return cached || fetch(event.request);
+    })
   );
 });
