@@ -769,8 +769,63 @@
     </div>
   </header>
 
+  <!-- ═══════════ SCREEN: HOME ═══════════ -->
+  <div id="screen-home" class="screen active">
+    <div style="padding:28px 20px;display:flex;flex-direction:column;gap:20px;flex:1">
+
+      <!-- hero -->
+      <div style="text-align:center;padding:20px 0 10px">
+        <svg width="72" height="72" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="72" height="72" rx="18" fill="#1a1a1a"/>
+          <circle cx="36" cy="36" r="24" stroke="#e8ff47" stroke-width="4"/>
+          <circle cx="36" cy="36" r="9" fill="#e8ff47"/>
+          <line x1="36" y1="12" x2="36" y2="8" stroke="#e8ff47" stroke-width="3" stroke-linecap="round"/>
+          <line x1="36" y1="64" x2="36" y2="60" stroke="#e8ff47" stroke-width="3" stroke-linecap="round"/>
+          <line x1="12" y1="36" x2="8" y2="36" stroke="#e8ff47" stroke-width="3" stroke-linecap="round"/>
+          <line x1="64" y1="36" x2="60" y2="36" stroke="#e8ff47" stroke-width="3" stroke-linecap="round"/>
+        </svg>
+        <div style="font-size:26px;font-weight:800;margin-top:14px;letter-spacing:-.5px">TireCheck Pro</div>
+        <div style="font-family:var(--font-mono);font-size:10px;color:var(--accent);letter-spacing:.14em;margin-top:4px">BY PEZZALIAPP</div>
+        <div style="font-size:13px;color:var(--text2);margin-top:10px;line-height:1.6">Diagnosi pneumatici con intelligenza artificiale.<br>Foto → Analisi → Report PDF firmabile.</div>
+      </div>
+
+      <!-- status setup -->
+      <div id="home-status-card" style="background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:16px;display:flex;flex-direction:column;gap:10px">
+        <div style="font-family:var(--font-mono);font-size:9px;letter-spacing:.12em;color:var(--accent);text-transform:uppercase">Stato configurazione</div>
+        <div id="home-api-status" style="display:flex;align-items:center;gap:10px;font-size:13px"></div>
+        <div id="home-officina-status" style="display:flex;align-items:center;gap:10px;font-size:13px"></div>
+        <div id="home-webhook-status" style="display:flex;align-items:center;gap:10px;font-size:13px"></div>
+      </div>
+
+      <!-- CTA -->
+      <button class="btn btn-primary" style="font-size:17px;padding:18px" onclick="goScreen('scan');updateNav('scan')">
+        📸 Inizia scansione
+      </button>
+      <button class="btn btn-secondary" onclick="goScreen('settings');loadSettings();updateNav('settings')">
+        ⚙️ Configura impostazioni
+      </button>
+
+      <!-- stats -->
+      <div id="home-stats" style="display:flex;gap:10px">
+        <div style="flex:1;background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:14px;text-align:center">
+          <div id="home-count" style="font-size:28px;font-weight:800;color:var(--accent)">0</div>
+          <div style="font-family:var(--font-mono);font-size:9px;color:var(--text2);text-transform:uppercase;margin-top:2px">Analisi</div>
+        </div>
+        <div style="flex:1;background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:14px;text-align:center">
+          <div id="home-ok-count" style="font-size:28px;font-weight:800;color:var(--ok)">0</div>
+          <div style="font-family:var(--font-mono);font-size:9px;color:var(--text2);text-transform:uppercase;margin-top:2px">OK</div>
+        </div>
+        <div style="flex:1;background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:14px;text-align:center">
+          <div id="home-danger-count" style="font-size:28px;font-weight:800;color:var(--danger)">0</div>
+          <div style="font-family:var(--font-mono);font-size:9px;color:var(--text2);text-transform:uppercase;margin-top:2px">Urgenti</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
   <!-- ═══════════ SCREEN: SCANSIONE ═══════════ -->
-  <div id="screen-scan" class="screen active">
+  <div id="screen-scan" class="screen">
 
     <!-- zona camera -->
     <div class="camera-zone" onclick="triggerCamera()">
@@ -978,16 +1033,19 @@
 
   <!-- ═══════════ BOTTOM NAV ═══════════ -->
   <nav>
-    <button class="nav-btn active" id="nav-scan" onclick="goScreen('scan')">
+    <button class="nav-btn active" id="nav-home" onclick="goScreen('home');loadHome()">
+      <span class="ico">🏠</span>Home
+    </button>
+    <button class="nav-btn" id="nav-scan" onclick="goScreen('scan');updateNav('scan')">
       <span class="ico">🔍</span>Scansione
     </button>
-    <button class="nav-btn" id="nav-analysis" onclick="goScreen('analysis')">
+    <button class="nav-btn" id="nav-analysis" onclick="goScreen('analysis');updateNav('analysis')">
       <span class="ico">📊</span>Analisi
     </button>
-    <button class="nav-btn" id="nav-history" onclick="goScreen('history');loadHistory()">
+    <button class="nav-btn" id="nav-history" onclick="goScreen('history');loadHistory();updateNav('history')">
       <span class="ico">📋</span>Storico
     </button>
-    <button class="nav-btn" id="nav-settings" onclick="goScreen('settings');loadSettings()">
+    <button class="nav-btn" id="nav-settings" onclick="goScreen('settings');loadSettings();updateNav('settings')">
       <span class="ico">⚙️</span>Setup
     </button>
   </nav>
@@ -1053,8 +1111,6 @@ const KEYS = {
 
 // ── INIT ───────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
-  // Forza sempre schermata scansione all'avvio
-  goScreen('scan');
   // PWA Service Worker
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('./sw.js').catch(() => {});
@@ -1063,19 +1119,61 @@ document.addEventListener('DOMContentLoaded', () => {
   initSignaturePad();
   setupFileInput();
 
-  // First run: mostra onboarding se manca la key
-  const key = ls(KEYS.gemini);
-  if (!key) {
-    document.getElementById('onboarding-modal').classList.add('open');
-  }
+  // Parte sempre da home
+  goScreen('home');
+  loadHome();
 });
+
+// ── UPDATE NAV ─────────────────────────────────
+function updateNav(name) {
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  const btn = document.getElementById('nav-' + name);
+  if (btn) btn.classList.add('active');
+}
+
+// ── LOAD HOME ──────────────────────────────────
+function loadHome() {
+  const key = ls(KEYS.gemini);
+  const officina = ls(KEYS.officina);
+  const webhook = ls(KEYS.webhook);
+
+  const apiEl = document.getElementById('home-api-status');
+  const offEl = document.getElementById('home-officina-status');
+  const whEl  = document.getElementById('home-webhook-status');
+
+  if (apiEl) apiEl.innerHTML = key
+    ? '<span style="color:var(--ok)">✅</span> Gemini API Key configurata'
+    : '<span style="color:var(--danger)">❌</span> <strong>Gemini API Key mancante</strong> — vai in Setup';
+
+  if (offEl) offEl.innerHTML = officina
+    ? `<span style="color:var(--ok)">✅</span> Officina: ${officina}`
+    : '<span style="color:var(--text3)">○</span> Nome officina non impostato';
+
+  if (whEl) whEl.innerHTML = webhook
+    ? '<span style="color:var(--ok)">✅</span> Make.com webhook configurato'
+    : '<span style="color:var(--text3)">○</span> Webhook Make.com non configurato';
+
+  // statistiche storico
+  const history = getHistory();
+  const okCount = history.filter(h => h.esito === 'OK').length;
+  const dangerCount = history.filter(h => h.esito === 'SOSTITUIRE').length;
+  const countEl = document.getElementById('home-count');
+  const okEl = document.getElementById('home-ok-count');
+  const dangerEl = document.getElementById('home-danger-count');
+  if (countEl) countEl.textContent = history.length;
+  if (okEl) okEl.textContent = okCount;
+  if (dangerEl) dangerEl.textContent = dangerCount;
+
+  // se manca la key: mostra avviso visivo (no modal intrusivo)
+  updateNav('home');
+}
 
 // ── NAVIGATION ─────────────────────────────────
 function goScreen(name) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById(`screen-${name}`).classList.add('active');
-  document.getElementById(`nav-${name}`)?.classList.add('active');
+  const screen = document.getElementById('screen-' + name);
+  if (screen) screen.classList.add('active');
+  updateNav(name);
 }
 
 // ── FILE INPUT / CAMERA ────────────────────────
@@ -1785,6 +1883,7 @@ function newScan() {
   document.getElementById('f-cliente').value = '';
 
   goScreen('scan');
+  updateNav('scan');
 }
 
 // ── ONBOARDING ─────────────────────────────────
@@ -1792,8 +1891,6 @@ function closeOnboarding() {
   document.getElementById('onboarding-modal').classList.remove('open');
   goScreen('settings');
   loadSettings();
-  document.getElementById('nav-settings').classList.add('active');
-  document.getElementById('nav-scan').classList.remove('active');
 }
 
 // ── TOAST ──────────────────────────────────────
