@@ -1111,14 +1111,8 @@ const KEYS = {
 
 // ── INIT ───────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
-  // PWA Service Worker — deregistra TUTTI i SW vecchi prima di registrare
+  // PWA Service Worker
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.getRegistrations().then(registrations => {
-      for (const reg of registrations) {
-        // Se il SW in cache non è la versione attuale, lo rimuoviamo
-        reg.update(); // forza check aggiornamento
-      }
-    });
     navigator.serviceWorker.register('./sw.js').catch(() => {});
   }
 
@@ -1330,11 +1324,11 @@ Sii preciso e professionale. Se l'immagine non mostra chiaramente un pneumatico,
       () => { const m = raw.match(/\{[\s\S]*?\}/); if(m) return JSON.parse(m[0]); throw 0; },
       () => { const m = raw.match(/\{[\s\S]*\}/); if(m) return JSON.parse(m[0]); throw 0; },
     ];
-    let lastErr;
-    for (const fn of attempts) { try { result = fn(); break; } catch(e) { lastErr = e; } }
+    let parseErr;
+    for (const fn of attempts) { try { result = fn(); break; } catch(e) { parseErr = e; } }
 
     if (!result) {
-      throw new Error('JSON non parsabile. Apri F12 Console per vedere la risposta raw. Dettaglio: ' + (lastErr && lastErr.message ? lastErr.message : 'parse error'));
+      throw new Error('JSON non parsabile. Apri F12 Console per vedere la risposta raw. Dettaglio: ' + (parseErr && parseErr.message ? parseErr.message : 'parse error'));
     }
 
     // normalizza campi
