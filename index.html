@@ -852,7 +852,7 @@
     </div>
 
     <!-- risultati (nascosti finché non pronti) -->
-    <div id="results-container" style="display:none;display:flex;flex-direction:column;gap:16px">
+    <div id="results-container" style="display:none;flex-direction:column;gap:16px">
 
       <!-- esito principale -->
       <div class="card" style="text-align:center;padding:20px">
@@ -1053,6 +1053,8 @@ const KEYS = {
 
 // ── INIT ───────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
+  // Forza sempre schermata scansione all'avvio
+  goScreen('scan');
   // PWA Service Worker
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('./sw.js').catch(() => {});
@@ -1159,62 +1161,86 @@ Rispondi SOLO con un oggetto JSON valido, senza markdown, senza commenti, con qu
 
 Sii preciso e professionale. Se l'immagine non mostra chiaramente un pneumatico, segnalalo nel commento e usa esito ATTENZIONE.`;
 
-  try {
-    const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          contents: [{
-            parts: [
-              {
-                inline_data: {
-                  mime_type: mimeType,
-                  data: base64
-                }
-              },
-              { text: prompt }
-            ]
-          }],
-          generationConfig: {
-            temperature: 0.2,
-            maxOutputTokens: 512,
-          }
-        })
-      }
-    );
+  // Modelli in ordine di preferenza — fallback automatico
+  const MODELS = [
+    'gemini-2.5-flash-preview-04-17',
+    'gemini-2.0-flash',
+    'gemini-1.5-flash-latest',
+  ];
 
-    if (!response.ok) {
-      let errMsg = `HTTP ${response.status}`;
-      try {
-        const errData = await response.json();
-        errMsg = errData.error?.message || errMsg;
-        if (response.status === 400) errMsg = "Richiesta non valida - controlla la chiave API";
-        if (response.status === 403) errMsg = "API Key non autorizzata o quota esaurita";
-        if (response.status === 404) errMsg = "Modello non trovato (404) - aggiorna la pagina";
-        if (response.status === 429) errMsg = "Quota Gemini esaurita - attendi qualche minuto";
-      } catch {}
-      throw new Error(errMsg);
+  const buildBody = () => JSON.stringify({
+    contents: [{
+      parts: [
+        { inline_data: { mime_type: mimeType, data: base64 } },
+        { text: prompt }
+      ]
+    }],
+    generationConfig: { temperature: 0.2, maxOutputTokens: 512 }
+  });
+
+  let response, usedModel;
+  let lastErr = '';
+
+  try {
+    for (const model of MODELS) {
+      response = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`,
+        { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: buildBody() }
+      );
+      if (response.ok) { usedModel = model; break; }
+
+      // leggi errore Google esatto (non sovrascrivere!)
+      let errBody = {};
+      try { errBody = await response.clone().json(); } catch {}
+      const googleMsg = errBody.error?.message || '';
+      lastErr = `[${model}] HTTP ${response.status}${googleMsg ? ': ' + googleMsg : ''}`;
+      console.warn('[TireCheck] Model failed:', lastErr);
+
+      // su 429 non provare altri modelli
+      if (response.status === 429) throw new Error('Quota Gemini esaurita — attendi qualche minuto');
+      // su 403 la chiave non è valida
+      if (response.status === 403) throw new Error(`API Key rifiutata da Google: ${googleMsg}`);
+    }
+
+    if (!response || !response.ok) {
+      throw new Error(`Tutti i modelli hanno fallito. Ultimo errore: ${lastErr}`);
     }
 
     const data = await response.json();
     const raw = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
 
-    // parsing JSON robusto
-    let result;
-    try {
-      const cleaned = raw.replace(/```json|```/g, '').trim();
-      result = JSON.parse(cleaned);
-    } catch {
-      // fallback: estrai JSON da eventuali testi intorno
-      const match = raw.match(/\{[\s\S]*\}/);
-      if (match) {
-        result = JSON.parse(match[0]);
-      } else {
-        throw new Error('Risposta AI non parsabile');
-      }
+    // debug: logga risposta raw
+    console.log('[TireCheck] Gemini raw:', raw);
+
+    if (!raw) {
+      const reason = data.candidates?.[0]?.finishReason;
+      if (reason === 'SAFETY') throw new Error("Immagine bloccata dai filtri Gemini - prova altra foto");
+      throw new Error('Risposta Gemini vuota (finishReason: ' + (reason || 'sconosciuto') + ')');
     }
+
+    // parsing ultra-robusto
+    let result;
+    const attempts = [
+      () => JSON.parse(raw.trim()),
+      () => JSON.parse(raw.replace(/^```(?:json)?\s*/i,'').replace(/```\s*$/,'').trim()),
+      () => { const m = raw.match(/\{[\s\S]*?\}/); if(m) return JSON.parse(m[0]); throw 0; },
+      () => { const m = raw.match(/\{[\s\S]*\}/); if(m) return JSON.parse(m[0]); throw 0; },
+    ];
+    let lastErr;
+    for (const fn of attempts) { try { result = fn(); break; } catch(e) { lastErr = e; } }
+
+    if (!result) {
+      throw new Error('JSON non parsabile. Apri F12 Console per vedere la risposta raw. Dettaglio: ' + (lastErr && lastErr.message ? lastErr.message : 'parse error'));
+    }
+
+    // normalizza campi
+    if (!result.esito || !['OK','ATTENZIONE','SOSTITUIRE'].includes(result.esito)) result.esito = 'ATTENZIONE';
+    result.profondita_mm = result.profondita_mm ?? result['profondità_mm'] ?? null;
+    result.usura_uniforme = result.usura_uniforme ?? true;
+    result.tipo_usura = result.tipo_usura ?? 'non determinato';
+    result.condizione_fianco = result.condizione_fianco ?? 'VERIFICARE';
+    result.urgenza = result.urgenza ?? 'media';
+    result.commento = result.commento ?? raw.substring(0, 300);
 
     state.analysisResult = {
       ...result,
@@ -1229,15 +1255,17 @@ Sii preciso e professionale. Se l'immagine non mostra chiaramente un pneumatico,
 
     showResults(state.analysisResult);
     saveToHistory(state.analysisResult);
+    if (usedModel) toast(`✅ Analisi completata (${usedModel})`, 'success');
 
   } catch (err) {
+    console.error('[TireCheck] Errore finale:', err);
     document.getElementById('ai-status').innerHTML = `
       <div style="font-size:24px">⚠️</div>
       <div class="ai-status-text" style="color:var(--danger)">
-        Errore: ${err.message}<br>
-        <small style="font-size:10px;color:var(--text3)">Verifica la chiave API nelle impostazioni</small>
+        ${err.message}<br>
+        <small style="font-size:10px;color:var(--text3)">Apri F12 → Console per dettagli tecnici</small>
       </div>`;
-    toast('Errore analisi AI', 'error');
+    toast(err.message, 'error');
   }
 }
 
