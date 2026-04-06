@@ -1111,8 +1111,14 @@ const KEYS = {
 
 // ── INIT ───────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
-  // PWA Service Worker
+  // PWA Service Worker — deregistra TUTTI i SW vecchi prima di registrare
   if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.getRegistrations().then(registrations => {
+      for (const reg of registrations) {
+        // Se il SW in cache non è la versione attuale, lo rimuoviamo
+        reg.update(); // forza check aggiornamento
+      }
+    });
     navigator.serviceWorker.register('./sw.js').catch(() => {});
   }
 

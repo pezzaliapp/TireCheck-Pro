@@ -1,62 +1,55 @@
 const CACHE_NAME = 'tirecheck-pro-v3';
-const ASSETS = [
-  './index.html',
-  './manifest.json'
-];
 
 self.addEventListener('install', event => {
-  event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => cache.addAll(ASSETS))
-  );
-  self.skipWaiting();
+  self.skipWaiting(); // attiva subito senza aspettare
 });
 
 self.addEventListener('activate', event => {
-  // Elimina TUTTE le cache vecchie
+  // Elimina TUTTE le cache precedenti senza eccezioni
   event.waitUntil(
     caches.keys().then(keys =>
-      Promise.all(
-        keys
-          .filter(key => key !== CACHE_NAME)
-          .map(key => {
-            console.log('[SW] Elimino cache vecchia:', key);
-            return caches.delete(key);
-          })
-      )
-    )
+      Promise.all(keys.map(key => caches.delete(key)))
+    ).then(() => self.clients.claim())
   );
-  self.clients.claim();
 });
 
 self.addEventListener('fetch', event => {
   const url = event.request.url;
 
-  // Gemini e Make.com: sempre rete diretta, mai cache
+  // API esterne: sempre rete diretta
   if (
     url.includes('generativelanguage.googleapis.com') ||
-    url.includes('hook.') ||
-    url.includes('make.com')
+    url.includes('make.com') ||
+    url.includes('fonts.googleapis.com') ||
+    url.includes('fonts.gstatic.com') ||
+    url.includes('cdnjs.cloudflare.com')
   ) {
-    return;
+    return; // passa alla rete nativa
   }
 
-  // index.html: network-first (prende sempre la versione aggiornata)
-  if (url.endsWith('/') || url.includes('index.html')) {
+  // index.html e root: SEMPRE dalla rete (network-first)
+  if (
+    url.endsWith('/') ||
+    url.includes('index.html') ||
+    url.includes('TireCheck-Pro/')
+  ) {
     event.respondWith(
-      fetch(event.request)
-        .then(response => {
-          // aggiorna la cache con la versione fresca
-          const clone = response.clone();
-          caches.open(CACHE_NAME).then(cache => cache.put(event.request, clone));
-          return response;
-        })
-        .catch(() => caches.match(event.request)) // fallback offline
+      fetch(event.request, { cache: 'no-store' })
+        .catch(() => caches.match('./index.html'))
     );
     return;
   }
 
-  // Tutto il resto: cache-first
+  // manifest.json e sw.js: network-first
+  if (url.includes('manifest.json') || url.includes('sw.js')) {
+    event.respondWith(
+      fetch(event.request, { cache: 'no-store' }).catch(() => caches.match(event.request))
+    );
+    return;
+  }
+
+  // tutto il resto: network con fallback cache
   event.respondWith(
-    caches.match(event.request).then(cached => cached || fetch(event.request))
+    fetch(event.request).catch(() => caches.match(event.request))
   );
 });
