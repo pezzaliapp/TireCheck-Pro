@@ -1260,7 +1260,7 @@ Rispondi SOLO con un oggetto JSON valido, senza markdown, senza commenti, con qu
 Sii preciso e professionale. Se l'immagine non mostra chiaramente un pneumatico, segnalalo nel commento e usa esito ATTENZIONE.`;
 
   // Chiamata diretta — stesso pattern di TriageFirst che funziona
-  const MODEL = 'gemini-1.5-flash';
+  const MODEL = 'gemini-2.5-flash-lite';
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent?key=${apiKey}`;
 
   let response, usedModel;
