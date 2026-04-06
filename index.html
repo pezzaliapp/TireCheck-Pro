@@ -833,6 +833,9 @@
       <div class="camera-placeholder" id="cam-placeholder">
         <div class="cam-ico">📷</div>
         <p>Tocca per fotografare</p>
+        <p style="font-size:9px;opacity:.6;margin-top:4px;padding:0 20px;text-align:center;line-height:1.5">
+          📐 Fotografa frontalmente il battistrada<br>con buona illuminazione
+        </p>
       </div>
       <div class="camera-overlay"></div>
     </div>
@@ -1243,21 +1246,26 @@ async function startAnalysis() {
   const mimeMatch = state.currentImage.match(/data:(image\/[^;]+);/);
   const mimeType = mimeMatch ? mimeMatch[1] : 'image/jpeg';
 
-  const prompt = `Sei un esperto tecnico di pneumatici con 20 anni di esperienza.
-Analizza questa immagine di un pneumatico e fornisci una valutazione tecnica dettagliata.
+  const prompt = `Sei un tecnico gommista esperto con 20 anni di esperienza. Analizza questa foto di un pneumatico.
 
-Rispondi SOLO con un oggetto JSON valido, senza markdown, senza commenti, con questa struttura esatta:
+REGOLE CRITICHE PER UNA VALUTAZIONE CORRETTA:
+1. Valuta SOLO ciò che è chiaramente visibile nel battistrada. NON fare supposizioni.
+2. Se la foto è angolata, laterale o il battistrada non è visibile frontalmente: usa ATTENZIONE con profondita_mm null.
+3. Usa SOSTITUIRE solo se vedi CHIARAMENTE: battistrada a filo, indicatori di usura esposti, o danni strutturali certi.
+4. Ombre scure nei solchi del battistrada significano solchi PROFONDI (pneumatico in buono stato), NON usura.
+5. Un battistrada nuovo o poco usato ha solchi profondi (7-8mm) con ombre marcate — NON confonderli con danni.
+6. In caso di dubbio scegli sempre l'esito più favorevole: OK > ATTENZIONE > SOSTITUIRE.
+
+Rispondi SOLO con JSON valido, niente markdown:
 {
-  "esito": "OK" | "ATTENZIONE" | "SOSTITUIRE",
-  "profondita_mm": numero (es. 4.5, stima visiva del battistrada in mm),
-  "usura_uniforme": true | false,
-  "tipo_usura": "centrale" | "laterale" | "irregolare" | "uniforme" | "nessuna anomalia",
-  "condizione_fianco": "OK" | "DANNEGGIATO" | "VERIFICARE",
-  "urgenza": "bassa" | "media" | "alta" | "critica",
-  "commento": "spiegazione tecnica dettagliata in italiano (max 3 frasi), cosa si vede, perché questo esito, cosa consigliare al cliente"
-}
-
-Sii preciso e professionale. Se l'immagine non mostra chiaramente un pneumatico, segnalalo nel commento e usa esito ATTENZIONE.`;
+  "esito": "OK" oppure "ATTENZIONE" oppure "SOSTITUIRE",
+  "profondita_mm": numero decimale oppure null se non misurabile,
+  "usura_uniforme": true oppure false,
+  "tipo_usura": "uniforme" oppure "centrale" oppure "laterale" oppure "irregolare" oppure "nessuna anomalia" oppure "non determinabile",
+  "condizione_fianco": "OK" oppure "DANNEGGIATO" oppure "VERIFICARE",
+  "urgenza": "bassa" oppure "media" oppure "alta" oppure "critica",
+  "commento": "Descrizione oggettiva in italiano di massimo 3 frasi: cosa vedi esattamente, qualità e angolo della foto, motivazione dell'esito."
+}`;
 
   // Chiamata diretta — stesso pattern di TriageFirst che funziona
   const MODEL = 'gemini-2.5-flash-lite';
