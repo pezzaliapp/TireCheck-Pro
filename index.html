@@ -1259,49 +1259,43 @@ Rispondi SOLO con un oggetto JSON valido, senza markdown, senza commenti, con qu
 
 Sii preciso e professionale. Se l'immagine non mostra chiaramente un pneumatico, segnalalo nel commento e usa esito ATTENZIONE.`;
 
-  // Modelli in ordine di preferenza — fallback automatico
-  const MODELS = [
-    'gemini-2.5-flash-preview-04-17',
-    'gemini-2.0-flash',
-    'gemini-1.5-flash-latest',
-  ];
-
-  const buildBody = () => JSON.stringify({
-    contents: [{
-      parts: [
-        { inlineData: { mimeType: mimeType, data: base64 } },
-        { text: prompt }
-      ]
-    }],
-    generationConfig: { temperature: 0.2, maxOutputTokens: 512 }
-  });
+  // Chiamata diretta — stesso pattern di TriageFirst che funziona
+  const MODEL = 'gemini-1.5-flash';
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent?key=${apiKey}`;
 
   let response, usedModel;
-  let lastErr = '';
 
   try {
-    for (const model of MODELS) {
-      response = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`,
-        { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: buildBody() }
-      );
-      if (response.ok) { usedModel = model; break; }
+    response = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contents: [{
+          parts: [
+            { inlineData: { mimeType: mimeType, data: base64 } },
+            { text: prompt }
+          ]
+        }],
+        generationConfig: {
+          temperature: 0.2,
+          maxOutputTokens: 800,
+          topP: 0.8,
+        },
+        safetySettings: [
+          { category: 'HARM_CATEGORY_DANGEROUS_CONTENT', threshold: 'BLOCK_NONE' },
+          { category: 'HARM_CATEGORY_HARASSMENT',        threshold: 'BLOCK_NONE' },
+          { category: 'HARM_CATEGORY_HATE_SPEECH',       threshold: 'BLOCK_NONE' },
+          { category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT', threshold: 'BLOCK_NONE' },
+        ],
+      })
+    });
 
-      // leggi errore Google esatto (non sovrascrivere!)
-      let errBody = {};
-      try { errBody = await response.clone().json(); } catch {}
-      const googleMsg = errBody.error?.message || '';
-      lastErr = `[${model}] HTTP ${response.status}${googleMsg ? ': ' + googleMsg : ''}`;
-      console.warn('[TireCheck] Model failed:', lastErr);
+    usedModel = MODEL;
 
-      // su 429 non provare altri modelli
-      if (response.status === 429) throw new Error('Quota Gemini esaurita — attendi qualche minuto');
-      // su 403 la chiave non è valida
-      if (response.status === 403) throw new Error(`API Key rifiutata da Google: ${googleMsg}`);
-    }
-
-    if (!response || !response.ok) {
-      throw new Error(`Tutti i modelli hanno fallito. Ultimo errore: ${lastErr}`);
+    if (!response.ok) {
+      const errData = await response.json().catch(() => ({}));
+      const msg = errData.error?.message || `HTTP ${response.status}`;
+      throw new Error(`Gemini error: ${msg}`);
     }
 
     const data = await response.json();
