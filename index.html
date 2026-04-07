@@ -12,8 +12,6 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
-
-  <!-- jsPDF per generazione PDF lato client -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
   <style>
@@ -51,7 +49,6 @@
       overflow: hidden;
     }
 
-    /* ── LAYOUT SHELL ──────────────────────────────────── */
     #app {
       display: flex;
       flex-direction: column;
@@ -74,17 +71,8 @@
       z-index: 10;
     }
 
-    .header-brand {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .header-logo {
-      width: 32px;
-      height: 32px;
-      flex-shrink: 0;
-    }
+    .header-brand { display: flex; align-items: center; gap: 10px; }
+    .header-logo { width: 32px; height: 32px; flex-shrink: 0; }
 
     .header-title {
       font-size: 16px;
@@ -92,7 +80,6 @@
       letter-spacing: -.3px;
       line-height: 1.1;
     }
-
     .header-title span {
       display: block;
       font-family: var(--font-mono);
@@ -179,31 +166,12 @@
     }
     .btn:active { transform: scale(.97); }
 
-    .btn-primary {
-      background: var(--accent);
-      color: #0d0d0d;
-    }
+    .btn-primary { background: var(--accent); color: #0d0d0d; }
     .btn-primary:hover { background: var(--accent2); }
-
-    .btn-secondary {
-      background: var(--card);
-      color: var(--text);
-      border: 1px solid var(--border);
-    }
+    .btn-secondary { background: var(--card); color: var(--text); border: 1px solid var(--border); }
     .btn-secondary:hover { border-color: var(--border2); }
-
-    .btn-danger {
-      background: transparent;
-      color: var(--danger);
-      border: 1px solid var(--danger);
-    }
-
-    .btn-sm {
-      padding: 9px 14px;
-      font-size: 13px;
-      border-radius: var(--r-sm);
-      width: auto;
-    }
+    .btn-danger { background: transparent; color: var(--danger); border: 1px solid var(--danger); }
+    .btn-sm { padding: 9px 14px; font-size: 13px; border-radius: var(--r-sm); width: auto; }
 
     /* ── CARDS ─────────────────────────────────────────── */
     .card {
@@ -214,11 +182,7 @@
     }
 
     /* ── FORM ELEMENTS ─────────────────────────────────── */
-    .field {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
+    .field { display: flex; flex-direction: column; gap: 6px; }
 
     label {
       font-family: var(--font-mono);
@@ -241,12 +205,9 @@
       transition: border-color .15s;
       appearance: none;
     }
-    input:focus, select:focus, textarea:focus {
-      border-color: var(--accent);
-    }
+    input:focus, select:focus, textarea:focus { border-color: var(--accent); }
     input[type="password"] { letter-spacing: .1em; }
     textarea { resize: none; }
-
     select option { background: var(--card); }
 
     /* ── BADGES ESITO ──────────────────────────────────── */
@@ -266,10 +227,11 @@
     .badge-warn   { background: rgba(255,165,2,.15);  color: var(--warn);   border: 1px solid rgba(255,165,2,.3); }
     .badge-danger { background: rgba(255,71,87,.15);  color: var(--danger); border: 1px solid rgba(255,71,87,.3); }
 
-    /* ── SCREEN: HOME / SCANSIONE ──────────────────────── */
-    #screen-scan {
-      padding: 0;
-    }
+    /* ── SCREEN: HOME ──────────────────────────────────── */
+    #screen-home { padding: 0; }
+
+    /* ── SCREEN: SCANSIONE ────────────────────────────── */
+    #screen-scan { padding: 0; }
 
     .camera-zone {
       position: relative;
@@ -297,12 +259,7 @@
       gap: 12px;
       color: var(--text3);
     }
-
-    .camera-placeholder .cam-ico {
-      font-size: 56px;
-      opacity: .35;
-    }
-
+    .camera-placeholder .cam-ico { font-size: 56px; opacity: .35; }
     .camera-placeholder p {
       font-family: var(--font-mono);
       font-size: 11px;
@@ -311,14 +268,8 @@
       opacity: .5;
     }
 
-    /* corner brackets overlay */
-    .camera-overlay {
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-    }
-    .camera-overlay::before,
-    .camera-overlay::after {
+    .camera-overlay { position: absolute; inset: 0; pointer-events: none; }
+    .camera-overlay::before, .camera-overlay::after {
       content: '';
       position: absolute;
       width: 40px;
@@ -327,14 +278,8 @@
       border-style: solid;
       opacity: .8;
     }
-    .camera-overlay::before {
-      top: 16px; left: 16px;
-      border-width: 3px 0 0 3px;
-    }
-    .camera-overlay::after {
-      bottom: 16px; right: 16px;
-      border-width: 0 3px 3px 0;
-    }
+    .camera-overlay::before { top: 16px; left: 16px; border-width: 3px 0 0 3px; }
+    .camera-overlay::after  { bottom: 16px; right: 16px; border-width: 0 3px 3px 0; }
 
     .scan-actions {
       padding: 16px 20px;
@@ -363,7 +308,6 @@
 
     #file-input { display: none; }
 
-    /* dati veicolo */
     .scan-form {
       padding: 0 20px 20px;
       display: flex;
@@ -388,29 +332,38 @@
       gap: 10px;
     }
 
-    /* ── SCREEN: ANALISI AI ────────────────────────────── */
-    #screen-analysis {
-      padding: 20px;
-      gap: 16px;
-    }
-
-    .analysis-header {
-      text-align: center;
-    }
-
-    .analysis-header h2 {
-      font-size: 20px;
-      font-weight: 700;
-    }
-
-    .analysis-header p {
+    /* ── OCR STATUS BANNER ─────────────────────────────── */
+    .ocr-banner {
+      display: none;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      background: rgba(232,255,71,.06);
+      border: 1px solid rgba(232,255,71,.2);
+      border-radius: var(--r-sm);
       font-family: var(--font-mono);
-      font-size: 11px;
-      color: var(--text2);
-      margin-top: 4px;
+      font-size: 10px;
+      color: var(--accent);
+      letter-spacing: .06em;
+    }
+    .ocr-banner.visible { display: flex; }
+    .ocr-spinner {
+      width: 14px;
+      height: 14px;
+      border: 2px solid rgba(232,255,71,.3);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin .7s linear infinite;
+      flex-shrink: 0;
     }
 
-    /* thumbnail risultato */
+    /* ── SCREEN: ANALISI ──────────────────────────────── */
+    #screen-analysis { padding: 20px; gap: 16px; }
+
+    .analysis-header { text-align: center; }
+    .analysis-header h2 { font-size: 20px; font-weight: 700; }
+    .analysis-header p { font-family: var(--font-mono); font-size: 11px; color: var(--text2); margin-top: 4px; }
+
     .result-thumb {
       width: 100%;
       aspect-ratio: 16/9;
@@ -420,7 +373,6 @@
       display: none;
     }
 
-    /* stato analisi */
     .ai-status {
       display: flex;
       align-items: center;
@@ -442,12 +394,8 @@
     }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    .ai-status-text {
-      font-size: 14px;
-      color: var(--text2);
-    }
+    .ai-status-text { font-size: 14px; color: var(--text2); }
 
-    /* metriche usura */
     .metrics-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -472,23 +420,12 @@
       color: var(--text2);
     }
 
-    .metric-value {
-      font-size: 22px;
-      font-weight: 700;
-      line-height: 1.1;
-    }
-
+    .metric-value { font-size: 22px; font-weight: 700; line-height: 1.1; }
     .metric-value.ok     { color: var(--ok); }
     .metric-value.warn   { color: var(--warn); }
     .metric-value.danger { color: var(--danger); }
+    .metric-sub { font-family: var(--font-mono); font-size: 10px; color: var(--text3); }
 
-    .metric-sub {
-      font-family: var(--font-mono);
-      font-size: 10px;
-      color: var(--text3);
-    }
-
-    /* commento AI */
     .ai-comment {
       background: var(--card);
       border-left: 3px solid var(--accent);
@@ -499,13 +436,28 @@
       color: var(--text2);
     }
 
-    /* firma digitale */
-    .signature-section {
+    /* ── DOT + MISURA BADGE nella schermata analisi ───── */
+    .tire-specs-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 14px 16px;
       display: flex;
-      flex-direction: column;
-      gap: 10px;
+      gap: 14px;
     }
+    .tire-spec-item { flex: 1; }
+    .tire-spec-item .metric-label { margin-bottom: 4px; }
+    .tire-spec-value {
+      font-family: var(--font-mono);
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--text);
+      letter-spacing: .04em;
+    }
+    .tire-spec-value.unknown { color: var(--text3); font-style: italic; }
 
+    /* firma */
+    .signature-section { display: flex; flex-direction: column; gap: 10px; }
     .signature-pad-wrap {
       position: relative;
       border: 1px solid var(--border);
@@ -513,7 +465,6 @@
       overflow: hidden;
       background: #fff;
     }
-
     #signature-pad {
       display: block;
       width: 100%;
@@ -521,7 +472,6 @@
       cursor: crosshair;
       touch-action: none;
     }
-
     .signature-hint {
       position: absolute;
       inset: 0;
@@ -536,36 +486,19 @@
       transition: opacity .3s;
     }
     .signature-hint.hidden { opacity: 0; }
+    .sign-actions { display: flex; gap: 8px; }
 
-    .sign-actions {
-      display: flex;
-      gap: 8px;
-    }
-
-    .analysis-actions {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      padding-bottom: 10px;
-    }
+    .analysis-actions { display: flex; flex-direction: column; gap: 10px; padding-bottom: 10px; }
 
     /* ── SCREEN: STORICO ───────────────────────────────── */
-    #screen-history {
-      padding: 20px;
-      gap: 14px;
-    }
+    #screen-history { padding: 20px; gap: 14px; }
 
     .history-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
     }
-
-    .history-header h2 {
-      font-size: 18px;
-      font-weight: 700;
-    }
-
+    .history-header h2 { font-size: 18px; font-weight: 700; }
     .history-count {
       font-family: var(--font-mono);
       font-size: 10px;
@@ -588,7 +521,6 @@
       transition: border-color .15s;
     }
     .history-item:active { border-color: var(--accent); }
-
     .history-thumb {
       width: 54px;
       height: 54px;
@@ -597,22 +529,9 @@
       background: var(--bg2);
       flex-shrink: 0;
     }
-
     .history-info { flex: 1; min-width: 0; }
-
-    .history-plate {
-      font-weight: 700;
-      font-size: 15px;
-      letter-spacing: .04em;
-    }
-
-    .history-meta {
-      font-family: var(--font-mono);
-      font-size: 10px;
-      color: var(--text2);
-      margin-top: 2px;
-    }
-
+    .history-plate { font-weight: 700; font-size: 15px; letter-spacing: .04em; }
+    .history-meta { font-family: var(--font-mono); font-size: 10px; color: var(--text2); margin-top: 2px; }
     .history-empty {
       flex: 1;
       display: flex;
@@ -624,9 +543,7 @@
       text-align: center;
       padding: 40px 20px;
     }
-
     .history-empty .ico { font-size: 48px; opacity: .3; }
-
     .history-empty p {
       font-family: var(--font-mono);
       font-size: 11px;
@@ -635,22 +552,9 @@
     }
 
     /* ── SCREEN: IMPOSTAZIONI ──────────────────────────── */
-    #screen-settings {
-      padding: 20px;
-      gap: 20px;
-    }
-
-    .settings-section {
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
-
-    .settings-title {
-      font-size: 18px;
-      font-weight: 700;
-    }
-
+    #screen-settings { padding: 20px; gap: 20px; }
+    .settings-title { font-size: 18px; font-weight: 700; }
+    .settings-section { display: flex; flex-direction: column; gap: 14px; }
     .api-info {
       background: rgba(232,255,71,.05);
       border: 1px solid rgba(232,255,71,.15);
@@ -661,8 +565,201 @@
       line-height: 1.7;
       color: var(--text2);
     }
-
     .api-info strong { color: var(--accent); }
+
+    /* ── SCREEN: OFFICINE VICINE ───────────────────────── */
+    #screen-nearby { padding: 20px; gap: 14px; }
+
+    .nearby-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nearby-header h2 { font-size: 18px; font-weight: 700; }
+
+    .nearby-filters {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .filter-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: .05em;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--text2);
+      transition: all .15s;
+      text-transform: uppercase;
+    }
+    .filter-chip.active {
+      background: rgba(232,255,71,.12);
+      border-color: rgba(232,255,71,.4);
+      color: var(--accent);
+    }
+    .filter-chip:active { transform: scale(.95); }
+
+    .nearby-place {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      transition: border-color .15s;
+    }
+    .nearby-place:active { border-color: var(--accent); }
+
+    .nearby-place-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .nearby-place-name {
+      font-size: 15px;
+      font-weight: 700;
+      line-height: 1.3;
+      flex: 1;
+    }
+
+    .nearby-place-type {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--text3);
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .nearby-place-info {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .nearby-place-addr {
+      font-size: 12px;
+      color: var(--text2);
+      line-height: 1.4;
+    }
+
+    .nearby-place-meta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .nearby-dist {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--text3);
+    }
+
+    .nearby-rating {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--warn);
+    }
+
+    .nearby-open {
+      font-family: var(--font-mono);
+      font-size: 10px;
+    }
+    .nearby-open.open  { color: var(--ok); }
+    .nearby-open.closed { color: var(--danger); }
+
+    .nearby-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 2px;
+    }
+
+    .nearby-btn {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 9px 12px;
+      border-radius: var(--r-sm);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      text-decoration: none;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: var(--bg2);
+      color: var(--text2);
+      transition: all .15s;
+    }
+    .nearby-btn.call {
+      background: rgba(46,213,115,.08);
+      border-color: rgba(46,213,115,.3);
+      color: var(--ok);
+    }
+    .nearby-btn.map {
+      background: rgba(232,255,71,.06);
+      border-color: rgba(232,255,71,.2);
+      color: var(--accent);
+    }
+    .nearby-btn:active { transform: scale(.96); }
+
+    .nearby-empty {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      color: var(--text3);
+      text-align: center;
+      padding: 40px 20px;
+      min-height: 200px;
+    }
+    .nearby-empty .ico { font-size: 48px; opacity: .3; }
+    .nearby-empty p {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+    }
+    .nearby-empty small {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      color: var(--text3);
+      line-height: 1.6;
+      text-transform: none;
+      letter-spacing: 0;
+    }
+
+    .nearby-info-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      background: rgba(232,255,71,.05);
+      border: 1px solid rgba(232,255,71,.12);
+      border-radius: var(--r-sm);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--text2);
+      line-height: 1.5;
+    }
 
     /* ── TOAST ─────────────────────────────────────────── */
     #toast {
@@ -677,7 +774,6 @@
       font-size: 13px;
       font-family: var(--font-mono);
       color: var(--text);
-      white-space: nowrap;
       opacity: 0;
       transition: all .25s;
       z-index: 999;
@@ -686,15 +782,12 @@
       white-space: normal;
       text-align: center;
     }
-    #toast.show {
-      opacity: 1;
-      transform: translateX(-50%) translateY(0);
-    }
+    #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
     #toast.success { border-color: var(--ok); color: var(--ok); }
     #toast.error   { border-color: var(--danger); color: var(--danger); }
     #toast.warn    { border-color: var(--warn); color: var(--warn); }
 
-    /* ── MODAL STORICO DETAIL ──────────────────────────── */
+    /* ── MODAL ─────────────────────────────────────────── */
     .modal-backdrop {
       position: fixed;
       inset: 0;
@@ -720,7 +813,6 @@
       flex-direction: column;
       gap: 16px;
     }
-
     .modal-handle {
       width: 40px;
       height: 4px;
@@ -729,16 +821,13 @@
       margin: 0 auto;
     }
 
-    /* ── ANIMAZIONI ENTRATA ────────────────────────────── */
-    .fade-in {
-      animation: fadeUp .3s ease both;
-    }
+    /* ── ANIMAZIONI ────────────────────────────────────── */
+    .fade-in { animation: fadeUp .3s ease both; }
     @keyframes fadeUp {
       from { opacity: 0; transform: translateY(12px); }
       to   { opacity: 1; transform: translateY(0); }
     }
 
-    /* ── SCROLLBAR ─────────────────────────────────────── */
     ::-webkit-scrollbar { width: 4px; }
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
@@ -773,9 +862,8 @@
   <div id="screen-home" class="screen active">
     <div style="padding:28px 20px;display:flex;flex-direction:column;gap:20px;flex:1">
 
-      <!-- hero -->
       <div style="text-align:center;padding:20px 0 10px">
-        <svg width="72" height="72" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg width="72" height="72" viewBox="0 0 72 72" fill="none">
           <rect width="72" height="72" rx="18" fill="#1a1a1a"/>
           <circle cx="36" cy="36" r="24" stroke="#e8ff47" stroke-width="4"/>
           <circle cx="36" cy="36" r="9" fill="#e8ff47"/>
@@ -789,15 +877,14 @@
         <div style="font-size:13px;color:var(--text2);margin-top:10px;line-height:1.6">Diagnosi pneumatici con intelligenza artificiale.<br>Foto → Analisi → Report PDF firmabile.</div>
       </div>
 
-      <!-- status setup -->
       <div id="home-status-card" style="background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:16px;display:flex;flex-direction:column;gap:10px">
         <div style="font-family:var(--font-mono);font-size:9px;letter-spacing:.12em;color:var(--accent);text-transform:uppercase">Stato configurazione</div>
         <div id="home-api-status" style="display:flex;align-items:center;gap:10px;font-size:13px"></div>
         <div id="home-officina-status" style="display:flex;align-items:center;gap:10px;font-size:13px"></div>
         <div id="home-webhook-status" style="display:flex;align-items:center;gap:10px;font-size:13px"></div>
+        <div id="home-places-status" style="display:flex;align-items:center;gap:10px;font-size:13px"></div>
       </div>
 
-      <!-- CTA -->
       <button class="btn btn-primary" style="font-size:17px;padding:18px" onclick="goScreen('scan');updateNav('scan')">
         📸 Inizia scansione
       </button>
@@ -805,7 +892,6 @@
         ⚙️ Configura impostazioni
       </button>
 
-      <!-- stats -->
       <div id="home-stats" style="display:flex;gap:10px">
         <div style="flex:1;background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:14px;text-align:center">
           <div id="home-count" style="font-size:28px;font-weight:800;color:var(--accent)">0</div>
@@ -827,14 +913,13 @@
   <!-- ═══════════ SCREEN: SCANSIONE ═══════════ -->
   <div id="screen-scan" class="screen">
 
-    <!-- zona camera -->
     <div class="camera-zone" onclick="triggerCamera()">
       <img id="preview-img" alt="Anteprima pneumatico">
       <div class="camera-placeholder" id="cam-placeholder">
         <div class="cam-ico">📷</div>
         <p>Tocca per fotografare</p>
         <p style="font-size:9px;opacity:.6;margin-top:4px;padding:0 20px;text-align:center;line-height:1.5">
-          📐 Fotografa frontalmente il battistrada<br>con buona illuminazione
+          📐 Fotografa battistrada frontalmente • AI rileva misura + DOT
         </p>
       </div>
       <div class="camera-overlay"></div>
@@ -842,7 +927,6 @@
 
     <input type="file" id="file-input" accept="image/*" capture="environment">
 
-    <!-- tasto scatta + galleria -->
     <div class="scan-actions">
       <button class="btn-camera" onclick="triggerCamera()">
         <span>📸</span> Scatta foto
@@ -850,8 +934,14 @@
       <button class="btn-icon" onclick="triggerGallery()" title="Galleria" style="width:48px;height:48px">🖼️</button>
     </div>
 
-    <!-- form dati veicolo -->
     <div class="scan-form">
+
+      <!-- OCR status banner -->
+      <div class="ocr-banner" id="ocr-banner">
+        <div class="ocr-spinner"></div>
+        <span id="ocr-banner-text">Rilevamento misura e DOT in corso…</span>
+      </div>
+
       <div class="section-label">Dati Veicolo</div>
 
       <div class="form-row">
@@ -871,6 +961,14 @@
         </div>
       </div>
 
+      <!-- Marca veicolo (usata per filtrare concessionarie) -->
+      <div class="field">
+        <label>Marca veicolo</label>
+        <input type="text" id="f-marca-veicolo" placeholder="es. Volkswagen, Fiat, BMW…">
+      </div>
+
+      <div class="section-label">Dati Pneumatico <span style="color:var(--text3);font-size:8px">(auto-rilevati da foto · editabili)</span></div>
+
       <div class="form-row">
         <div class="field">
           <label>Marca gomma</label>
@@ -880,6 +978,11 @@
           <label>Misura</label>
           <input type="text" id="f-misura" placeholder="205/55 R16">
         </div>
+      </div>
+
+      <div class="field">
+        <label>Codice DOT</label>
+        <input type="text" id="f-dot" placeholder="DOT rilevato dalla foto" style="font-family:var(--font-mono);letter-spacing:.04em">
       </div>
 
       <div class="field">
@@ -903,13 +1006,11 @@
 
     <img id="result-thumb" class="result-thumb" alt="Pneumatico analizzato">
 
-    <!-- stato AI -->
     <div class="ai-status" id="ai-status">
       <div class="spinner"></div>
       <div class="ai-status-text">Analisi AI in corso…</div>
     </div>
 
-    <!-- risultati (nascosti finché non pronti) -->
     <div id="results-container" style="display:none;flex-direction:column;gap:16px">
 
       <!-- esito principale -->
@@ -917,6 +1018,25 @@
         <div style="font-family:var(--font-mono);font-size:10px;color:var(--text2);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px">Esito</div>
         <div id="esito-badge" style="display:flex;justify-content:center;margin-bottom:8px"></div>
         <div id="esito-title" style="font-size:22px;font-weight:800;margin-top:4px"></div>
+      </div>
+
+      <!-- dati pneumatico rilevati -->
+      <div>
+        <div class="section-label">Dati Pneumatico Rilevati</div>
+        <div class="tire-specs-card">
+          <div class="tire-spec-item">
+            <div class="metric-label">Misura</div>
+            <div class="tire-spec-value" id="r-misura">—</div>
+          </div>
+          <div class="tire-spec-item">
+            <div class="metric-label">Codice DOT</div>
+            <div class="tire-spec-value" id="r-dot">—</div>
+          </div>
+          <div class="tire-spec-item">
+            <div class="metric-label">Anno prod.</div>
+            <div class="tire-spec-value" id="r-dot-year">—</div>
+          </div>
+        </div>
       </div>
 
       <!-- metriche -->
@@ -943,13 +1063,11 @@
         </div>
       </div>
 
-      <!-- commento AI -->
       <div>
         <div class="section-label">Valutazione AI</div>
         <div class="ai-comment" id="ai-comment">—</div>
       </div>
 
-      <!-- firma cliente -->
       <div class="signature-section">
         <div class="section-label">Firma Cliente</div>
         <div class="signature-pad-wrap">
@@ -962,10 +1080,10 @@
         </div>
       </div>
 
-      <!-- azioni finali -->
       <div class="analysis-actions">
         <button class="btn btn-primary" onclick="generatePDF()">📄 Genera Report PDF</button>
         <button class="btn btn-secondary" onclick="sendWebhook()">📡 Invia a Make.com</button>
+        <button class="btn btn-secondary" onclick="goNearby()">📍 Trova officine vicine</button>
         <button class="btn btn-secondary" onclick="newScan()">＋ Nuova scansione</button>
       </div>
 
@@ -979,6 +1097,39 @@
       <span class="history-count" id="history-count">0 analisi</span>
     </div>
     <div id="history-list"></div>
+  </div>
+
+  <!-- ═══════════ SCREEN: OFFICINE VICINE ═══════════ -->
+  <div id="screen-nearby" class="screen">
+    <div class="nearby-header">
+      <h2>Officine Vicine</h2>
+      <button class="btn-icon" onclick="refreshNearby()" title="Aggiorna" id="btn-refresh-nearby">🔄</button>
+    </div>
+
+    <div class="nearby-info-bar" id="nearby-info-bar" style="display:none">
+      <span>📍</span>
+      <span id="nearby-info-text">Ricerca in corso…</span>
+    </div>
+
+    <div class="nearby-filters">
+      <button class="filter-chip active" id="chip-gommisti" onclick="toggleFilter('gommisti')">🔧 Gommisti</button>
+      <button class="filter-chip active" id="chip-autofficine" onclick="toggleFilter('autofficine')">🛠️ Autofficine</button>
+      <button class="filter-chip active" id="chip-concessionarie" onclick="toggleFilter('concessionarie')">🏢 Concessionarie</button>
+    </div>
+
+    <div id="nearby-list">
+      <div class="nearby-empty">
+        <div class="ico">📍</div>
+        <p>Nessuna ricerca effettuata</p>
+        <small>Premi il pulsante in basso per trovare<br>officine e gommisti vicino a te</small>
+      </div>
+    </div>
+
+    <div style="padding-bottom:10px">
+      <button class="btn btn-primary" onclick="startNearbySearch()" id="btn-start-nearby">
+        📍 Trova vicino a me
+      </button>
+    </div>
   </div>
 
   <!-- ═══════════ SCREEN: IMPOSTAZIONI ═══════════ -->
@@ -995,6 +1146,19 @@
       <div class="field">
         <label>Gemini API Key</label>
         <input type="password" id="s-gemini-key" placeholder="AIzaSy…" autocomplete="off">
+      </div>
+    </div>
+
+    <div class="settings-section">
+      <div class="section-label">Google Places API</div>
+      <div class="api-info">
+        <strong>📍 Officine vicine:</strong> necessaria per trovare gommisti,
+        autofficine e concessionarie tramite Google Maps Places API.<br>
+        Ottienila su <strong>console.cloud.google.com</strong> → Places API (New).
+      </div>
+      <div class="field">
+        <label>Places API Key</label>
+        <input type="password" id="s-places-key" placeholder="AIzaSy…" autocomplete="off">
       </div>
     </div>
 
@@ -1030,7 +1194,7 @@
     <button class="btn btn-danger" onclick="clearHistory()" style="margin-top:4px">🗑️ Svuota storico</button>
 
     <div style="text-align:center;font-family:var(--font-mono);font-size:9px;color:var(--text3);padding:10px 0">
-      TireCheck Pro · v1.0 · PezzaliApp
+      TireCheck Pro · v2.0 · PezzaliApp
     </div>
   </div>
 
@@ -1045,6 +1209,9 @@
     <button class="nav-btn" id="nav-analysis" onclick="goScreen('analysis');updateNav('analysis')">
       <span class="ico">📊</span>Analisi
     </button>
+    <button class="nav-btn" id="nav-nearby" onclick="goScreen('nearby');updateNav('nearby')">
+      <span class="ico">📍</span>Vicino
+    </button>
     <button class="nav-btn" id="nav-history" onclick="goScreen('history');loadHistory();updateNav('history')">
       <span class="ico">📋</span>Storico
     </button>
@@ -1055,10 +1222,8 @@
 
 </div>
 
-<!-- ═══════════ TOAST ═══════════ -->
 <div id="toast"></div>
 
-<!-- ═══════════ MODAL STORICO DETAIL ═══════════ -->
 <div class="modal-backdrop" id="detail-modal" onclick="closeModal(event)">
   <div class="modal-sheet" id="detail-sheet">
     <div class="modal-handle"></div>
@@ -1066,7 +1231,6 @@
   </div>
 </div>
 
-<!-- ═══════════ BANNER FIRST RUN ═══════════ -->
 <div class="modal-backdrop" id="onboarding-modal">
   <div class="modal-sheet">
     <div class="modal-handle"></div>
@@ -1075,7 +1239,8 @@
       <h2 style="font-size:20px;font-weight:800;margin-bottom:6px">Benvenuto in TireCheck Pro</h2>
       <p style="font-family:var(--font-mono);font-size:11px;color:var(--text2);line-height:1.7">
         Per usare l'analisi AI inserisci la tua <strong style="color:var(--accent)">Gemini API Key</strong> gratuita.<br>
-        Vai su <strong>aistudio.google.com</strong> → Get API Key → crea chiave gratuita.
+        Vai su <strong>aistudio.google.com</strong> → Get API Key → crea chiave gratuita.<br><br>
+        Per trovare officine vicine inserisci anche la <strong style="color:var(--accent)">Google Places API Key</strong>.
       </p>
     </div>
     <button class="btn btn-primary" onclick="closeOnboarding()">Configura ora →</button>
@@ -1085,64 +1250,79 @@
 
 <script>
 /* ═══════════════════════════════════════════════
-   TIRECHECK PRO · LOGICA APPLICAZIONE
+   TIRECHECK PRO v2.0 · LOGICA APPLICAZIONE
    PezzaliApp © 2025
 ═══════════════════════════════════════════════ */
 
 // ── STATE ──────────────────────────────────────
 const state = {
-  currentImage: null,      // base64 dell'immagine corrente
-  currentImageFile: null,  // File object
-  analysisResult: null,    // oggetto risultato AI
-  signatureData: null,     // base64 firma
-  signaturePad: null,      // istanza canvas ctx
+  currentImage: null,
+  currentImageFile: null,
+  analysisResult: null,
+  signatureData: null,
+  signaturePad: null,
   isDrawing: false,
   hasDrawn: false,
   skipSignature: false,
+  // nearby
+  nearbyPlaces: [],
+  nearbyFilters: { gommisti: true, autofficine: true, concessionarie: true },
+  userLat: null,
+  userLng: null,
 };
 
 // ── STORAGE KEYS ───────────────────────────────
 const KEYS = {
-  gemini: 'tirecheck-gemini-key',
-  webhook: 'tirecheck-webhook',
-  officina: 'tirecheck-officina',
-  tel: 'tirecheck-tel',
-  addr: 'tirecheck-addr',
-  piva: 'tirecheck-piva',
-  history: 'tirecheck-history',
+  gemini:    'tirecheck-gemini-key',
+  places:    'tirecheck-places-key',
+  webhook:   'tirecheck-webhook',
+  officina:  'tirecheck-officina',
+  tel:       'tirecheck-tel',
+  addr:      'tirecheck-addr',
+  piva:      'tirecheck-piva',
+  history:   'tirecheck-history',
 };
 
 // ── INIT ───────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
-  // PWA Service Worker
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('./sw.js').catch(() => {});
   }
-
   initSignaturePad();
   setupFileInput();
-
-  // Parte sempre da home
   goScreen('home');
   loadHome();
+  // first run check
+  if (!ls(KEYS.gemini)) {
+    document.getElementById('onboarding-modal').classList.add('open');
+  }
 });
 
-// ── UPDATE NAV ─────────────────────────────────
+// ── NAVIGATION ─────────────────────────────────
 function updateNav(name) {
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
   const btn = document.getElementById('nav-' + name);
   if (btn) btn.classList.add('active');
 }
 
+function goScreen(name) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  const screen = document.getElementById('screen-' + name);
+  if (screen) screen.classList.add('active');
+  updateNav(name);
+}
+
 // ── LOAD HOME ──────────────────────────────────
 function loadHome() {
-  const key = ls(KEYS.gemini);
+  const key      = ls(KEYS.gemini);
+  const places   = ls(KEYS.places);
   const officina = ls(KEYS.officina);
-  const webhook = ls(KEYS.webhook);
+  const webhook  = ls(KEYS.webhook);
 
-  const apiEl = document.getElementById('home-api-status');
-  const offEl = document.getElementById('home-officina-status');
-  const whEl  = document.getElementById('home-webhook-status');
+  const apiEl    = document.getElementById('home-api-status');
+  const offEl    = document.getElementById('home-officina-status');
+  const whEl     = document.getElementById('home-webhook-status');
+  const placesEl = document.getElementById('home-places-status');
 
   if (apiEl) apiEl.innerHTML = key
     ? '<span style="color:var(--ok)">✅</span> Gemini API Key configurata'
@@ -1156,27 +1336,21 @@ function loadHome() {
     ? '<span style="color:var(--ok)">✅</span> Make.com webhook configurato'
     : '<span style="color:var(--text3)">○</span> Webhook Make.com non configurato';
 
-  // statistiche storico
+  if (placesEl) placesEl.innerHTML = places
+    ? '<span style="color:var(--ok)">✅</span> Google Places API Key configurata'
+    : '<span style="color:var(--text3)">○</span> Places API Key mancante (officine vicine)';
+
   const history = getHistory();
-  const okCount = history.filter(h => h.esito === 'OK').length;
+  const okCount     = history.filter(h => h.esito === 'OK').length;
   const dangerCount = history.filter(h => h.esito === 'SOSTITUIRE').length;
-  const countEl = document.getElementById('home-count');
-  const okEl = document.getElementById('home-ok-count');
+  const countEl  = document.getElementById('home-count');
+  const okEl     = document.getElementById('home-ok-count');
   const dangerEl = document.getElementById('home-danger-count');
-  if (countEl) countEl.textContent = history.length;
-  if (okEl) okEl.textContent = okCount;
+  if (countEl)  countEl.textContent  = history.length;
+  if (okEl)     okEl.textContent     = okCount;
   if (dangerEl) dangerEl.textContent = dangerCount;
 
-  // se manca la key: mostra avviso visivo (no modal intrusivo)
   updateNav('home');
-}
-
-// ── NAVIGATION ─────────────────────────────────
-function goScreen(name) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  const screen = document.getElementById('screen-' + name);
-  if (screen) screen.classList.add('active');
-  updateNav(name);
 }
 
 // ── FILE INPUT / CAMERA ────────────────────────
@@ -1207,15 +1381,125 @@ function handleImageFile(file) {
   state.currentImageFile = file;
   const reader = new FileReader();
   reader.onload = e => {
-    state.currentImage = e.target.result; // data URL
+    state.currentImage = e.target.result;
     const img = document.getElementById('preview-img');
     img.src = state.currentImage;
     img.style.display = 'block';
     document.getElementById('cam-placeholder').style.display = 'none';
     document.getElementById('btn-analyze').disabled = false;
-    toast('Immagine caricata — pronto per analisi', 'success');
+    toast('Immagine caricata — rilevamento in corso…', 'success');
+    // avvia OCR misura+DOT automaticamente
+    runOcrExtraction();
   };
   reader.readAsDataURL(file);
+}
+
+// ── OCR: ESTRAZIONE MISURA + DOT DA FOTO ───────
+async function runOcrExtraction() {
+  const apiKey = ls(KEYS.gemini);
+  if (!apiKey || !state.currentImage) return;
+
+  // mostra banner OCR
+  const banner = document.getElementById('ocr-banner');
+  banner.classList.add('visible');
+  document.getElementById('ocr-banner-text').textContent = 'Rilevamento misura e DOT in corso…';
+
+  const base64   = state.currentImage.split(',')[1];
+  const mimeMatch = state.currentImage.match(/data:(image\/[^;]+);/);
+  const mimeType  = mimeMatch ? mimeMatch[1] : 'image/jpeg';
+
+  const ocrPrompt = `Sei un tecnico esperto di pneumatici. Analizza questa foto e cerca eventuali scritte sul fianco del pneumatico.
+
+Estrai SOLO questi dati se visibili nella foto:
+1. La MISURA del pneumatico (es. 205/55 R16, 195/65R15, 225/45R17, ecc.)
+2. Il CODICE DOT (es. DOT U2LL LMLR 2319 — gli ultimi 4 cifre indicano settimana e anno di produzione)
+3. La MARCA del pneumatico (es. Michelin, Pirelli, Continental, Bridgestone, ecc.)
+
+REGOLE:
+- Se non è visibile con certezza, scrivi null per quel campo.
+- Non inventare dati. Solo quello che vedi chiaramente.
+- Le ultime 4 cifre del DOT indicano settimana+anno (es. 2319 = settimana 23 del 2019).
+
+Rispondi SOLO con JSON valido, niente markdown:
+{
+  "misura": "205/55 R16" oppure null,
+  "dot": "DOT XXXX XXXX XXYY" oppure null,
+  "anno_produzione": 2019 oppure null,
+  "marca": "Michelin" oppure null
+}`;
+
+  const MODEL = 'gemini-2.5-flash-lite';
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent?key=${apiKey}`;
+
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contents: [{ parts: [
+          { inlineData: { mimeType, data: base64 } },
+          { text: ocrPrompt }
+        ]}],
+        generationConfig: { temperature: 0.1, maxOutputTokens: 300 },
+        safetySettings: [
+          { category: 'HARM_CATEGORY_DANGEROUS_CONTENT', threshold: 'BLOCK_NONE' },
+          { category: 'HARM_CATEGORY_HARASSMENT',        threshold: 'BLOCK_NONE' },
+          { category: 'HARM_CATEGORY_HATE_SPEECH',       threshold: 'BLOCK_NONE' },
+          { category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT', threshold: 'BLOCK_NONE' },
+        ],
+      })
+    });
+
+    if (!response.ok) throw new Error('OCR API error');
+
+    const data = await response.json();
+    const raw  = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+
+    let ocr;
+    const cleanRaw = raw.replace(/^```(?:json)?\s*/i,'').replace(/```\s*$/,'').trim();
+    const jsonMatch = cleanRaw.match(/\{[\s\S]*\}/);
+    if (jsonMatch) ocr = JSON.parse(jsonMatch[0]);
+
+    if (ocr) {
+      // pre-compila i campi solo se non già inseriti manualmente
+      const misuraInput = document.getElementById('f-misura');
+      const dotInput    = document.getElementById('f-dot');
+      const marcaInput  = document.getElementById('f-marca');
+
+      let found = [];
+
+      if (ocr.misura && !misuraInput.value.trim()) {
+        misuraInput.value = ocr.misura;
+        found.push('misura');
+      }
+      if (ocr.dot && !dotInput.value.trim()) {
+        dotInput.value = ocr.dot;
+        found.push('DOT');
+      }
+      if (ocr.marca && !marcaInput.value.trim()) {
+        marcaInput.value = ocr.marca;
+        found.push('marca');
+      }
+
+      // salva anno produzione nello state per usarlo nel report
+      state.ocrAnno = ocr.anno_produzione || null;
+
+      if (found.length > 0) {
+        document.getElementById('ocr-banner-text').textContent =
+          `✅ Rilevati: ${found.join(', ')} — verifica e correggi se necessario`;
+        setTimeout(() => banner.classList.remove('visible'), 4000);
+      } else {
+        document.getElementById('ocr-banner-text').textContent =
+          'Dati non rilevati nella foto — inserisci manualmente';
+        setTimeout(() => banner.classList.remove('visible'), 3000);
+      }
+    } else {
+      banner.classList.remove('visible');
+    }
+  } catch(e) {
+    console.warn('[TireCheck OCR]', e);
+    banner.classList.remove('visible');
+  }
 }
 
 // ── ANALISI AI ─────────────────────────────────
@@ -1230,23 +1514,28 @@ async function startAnalysis() {
     return;
   }
 
-  // passa alla schermata analisi
   goScreen('analysis');
   document.getElementById('analysis-subtitle').textContent = 'analisi in corso…';
   document.getElementById('ai-status').style.display = 'flex';
   document.getElementById('results-container').style.display = 'none';
 
-  // mostra thumbnail
   const thumb = document.getElementById('result-thumb');
   thumb.src = state.currentImage;
   thumb.style.display = 'block';
 
-  // prepara base64 puro (rimuovi data:image/...;base64,)
-  const base64 = state.currentImage.split(',')[1];
+  const base64   = state.currentImage.split(',')[1];
   const mimeMatch = state.currentImage.match(/data:(image\/[^;]+);/);
-  const mimeType = mimeMatch ? mimeMatch[1] : 'image/jpeg';
+  const mimeType  = mimeMatch ? mimeMatch[1] : 'image/jpeg';
+
+  // leggi i campi attuali (eventualmente già pre-compilati da OCR)
+  const misuraAttuale = document.getElementById('f-misura').value.trim();
+  const dotAttuale    = document.getElementById('f-dot').value.trim();
 
   const prompt = `Sei un tecnico gommista esperto con 20 anni di esperienza. Analizza questa foto di un pneumatico.
+
+DATI GIÀ DISPONIBILI (verificati dall'utente):
+- Misura: ${misuraAttuale || 'da rilevare'}
+- DOT: ${dotAttuale || 'da rilevare'}
 
 REGOLE CRITICHE PER UNA VALUTAZIONE CORRETTA:
 1. Valuta SOLO ciò che è chiaramente visibile nel battistrada. NON fare supposizioni.
@@ -1264,31 +1553,25 @@ Rispondi SOLO con JSON valido, niente markdown:
   "tipo_usura": "uniforme" oppure "centrale" oppure "laterale" oppure "irregolare" oppure "nessuna anomalia" oppure "non determinabile",
   "condizione_fianco": "OK" oppure "DANNEGGIATO" oppure "VERIFICARE",
   "urgenza": "bassa" oppure "media" oppure "alta" oppure "critica",
+  "misura": "205/55 R16" oppure null se non visibile,
+  "dot": "stringa DOT" oppure null se non visibile,
+  "anno_produzione": numero anno oppure null,
   "commento": "Descrizione oggettiva in italiano di massimo 3 frasi: cosa vedi esattamente, qualità e angolo della foto, motivazione dell'esito."
 }`;
 
-  // Chiamata diretta — stesso pattern di TriageFirst che funziona
   const MODEL = 'gemini-2.5-flash-lite';
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent?key=${apiKey}`;
 
-  let response, usedModel;
-
   try {
-    response = await fetch(url, {
+    const response = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        contents: [{
-          parts: [
-            { inlineData: { mimeType: mimeType, data: base64 } },
-            { text: prompt }
-          ]
-        }],
-        generationConfig: {
-          temperature: 0.2,
-          maxOutputTokens: 800,
-          topP: 0.8,
-        },
+        contents: [{ parts: [
+          { inlineData: { mimeType, data: base64 } },
+          { text: prompt }
+        ]}],
+        generationConfig: { temperature: 0.2, maxOutputTokens: 800, topP: 0.8 },
         safetySettings: [
           { category: 'HARM_CATEGORY_DANGEROUS_CONTENT', threshold: 'BLOCK_NONE' },
           { category: 'HARM_CATEGORY_HARASSMENT',        threshold: 'BLOCK_NONE' },
@@ -1298,64 +1581,60 @@ Rispondi SOLO con JSON valido, niente markdown:
       })
     });
 
-    usedModel = MODEL;
-
     if (!response.ok) {
       const errData = await response.json().catch(() => ({}));
-      const msg = errData.error?.message || `HTTP ${response.status}`;
-      throw new Error(`Gemini error: ${msg}`);
+      throw new Error(`Gemini error: ${errData.error?.message || `HTTP ${response.status}`}`);
     }
 
     const data = await response.json();
-    const raw = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
-
-    // debug: logga risposta raw
+    const raw  = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
     console.log('[TireCheck] Gemini raw:', raw);
 
     if (!raw) {
       const reason = data.candidates?.[0]?.finishReason;
-      if (reason === 'SAFETY') throw new Error("Immagine bloccata dai filtri Gemini - prova altra foto");
+      if (reason === 'SAFETY') throw new Error('Immagine bloccata dai filtri Gemini - prova altra foto');
       throw new Error('Risposta Gemini vuota (finishReason: ' + (reason || 'sconosciuto') + ')');
     }
 
-    // parsing ultra-robusto
     let result;
     const attempts = [
       () => JSON.parse(raw.trim()),
       () => JSON.parse(raw.replace(/^```(?:json)?\s*/i,'').replace(/```\s*$/,'').trim()),
       () => { const m = raw.match(/\{[\s\S]*?\}/); if(m) return JSON.parse(m[0]); throw 0; },
-      () => { const m = raw.match(/\{[\s\S]*\}/); if(m) return JSON.parse(m[0]); throw 0; },
+      () => { const m = raw.match(/\{[\s\S]*\}/);  if(m) return JSON.parse(m[0]); throw 0; },
     ];
     let parseErr;
     for (const fn of attempts) { try { result = fn(); break; } catch(e) { parseErr = e; } }
+    if (!result) throw new Error('JSON non parsabile. Dettaglio: ' + (parseErr?.message || 'parse error'));
 
-    if (!result) {
-      throw new Error('JSON non parsabile. Apri F12 Console per vedere la risposta raw. Dettaglio: ' + (parseErr && parseErr.message ? parseErr.message : 'parse error'));
-    }
-
-    // normalizza campi
+    // normalizza
     if (!result.esito || !['OK','ATTENZIONE','SOSTITUIRE'].includes(result.esito)) result.esito = 'ATTENZIONE';
-    result.profondita_mm = result.profondita_mm ?? result['profondità_mm'] ?? null;
-    result.usura_uniforme = result.usura_uniforme ?? true;
-    result.tipo_usura = result.tipo_usura ?? 'non determinato';
+    result.profondita_mm    = result.profondita_mm ?? result['profondità_mm'] ?? null;
+    result.usura_uniforme   = result.usura_uniforme ?? true;
+    result.tipo_usura       = result.tipo_usura ?? 'non determinato';
     result.condizione_fianco = result.condizione_fianco ?? 'VERIFICARE';
-    result.urgenza = result.urgenza ?? 'media';
-    result.commento = result.commento ?? raw.substring(0, 300);
+    result.urgenza          = result.urgenza ?? 'media';
+    result.commento         = result.commento ?? raw.substring(0, 300);
+
+    // usa misura/DOT da form (già compilati da OCR o manualmente) se AI non li trova
+    result.misura = misuraAttuale || result.misura || null;
+    result.dot    = dotAttuale    || result.dot    || null;
+    result.anno_produzione = result.anno_produzione || state.ocrAnno || null;
 
     state.analysisResult = {
       ...result,
-      targa: document.getElementById('f-targa').value.toUpperCase(),
-      posizione: document.getElementById('f-posizione').value,
-      marca: document.getElementById('f-marca').value,
-      misura: document.getElementById('f-misura').value,
-      cliente: document.getElementById('f-cliente').value,
-      timestamp: new Date().toISOString(),
-      image: state.currentImage,
+      targa:        document.getElementById('f-targa').value.toUpperCase(),
+      posizione:    document.getElementById('f-posizione').value,
+      marca_gomma:  document.getElementById('f-marca').value,
+      marca_veicolo: document.getElementById('f-marca-veicolo').value,
+      cliente:      document.getElementById('f-cliente').value,
+      timestamp:    new Date().toISOString(),
+      image:        state.currentImage,
     };
 
     showResults(state.analysisResult);
     saveToHistory(state.analysisResult);
-    if (usedModel) toast(`✅ Analisi completata (${usedModel})`, 'success');
+    toast(`✅ Analisi completata (${MODEL})`, 'success');
 
   } catch (err) {
     console.error('[TireCheck] Errore finale:', err);
@@ -1393,31 +1672,45 @@ function showResults(r) {
   document.getElementById('esito-title').style.color =
     r.esito === 'OK' ? 'var(--ok)' : r.esito === 'ATTENZIONE' ? 'var(--warn)' : 'var(--danger)';
 
+  // dati pneumatico
+  const misuraEl = document.getElementById('r-misura');
+  const dotEl    = document.getElementById('r-dot');
+  const yearEl   = document.getElementById('r-dot-year');
+  misuraEl.textContent = r.misura || '—';
+  misuraEl.className   = 'tire-spec-value' + (r.misura ? '' : ' unknown');
+  dotEl.textContent    = r.dot ? r.dot.replace(/^DOT\s*/i,'DOT ') : '—';
+  dotEl.className      = 'tire-spec-value' + (r.dot ? '' : ' unknown');
+  if (r.anno_produzione) {
+    yearEl.textContent = r.anno_produzione;
+    const age = new Date().getFullYear() - r.anno_produzione;
+    yearEl.className   = 'tire-spec-value ' + (age >= 6 ? 'danger' : age >= 4 ? 'warn' : 'ok');
+    yearEl.title       = `${age} anni di età`;
+  } else {
+    yearEl.textContent = '—';
+    yearEl.className   = 'tire-spec-value unknown';
+  }
+
   // metriche
   const depth = r.profondita_mm ?? '?';
   const depthEl = document.getElementById('m-depth');
   depthEl.textContent = `${depth} mm`;
-  depthEl.className = 'metric-value ' + (depth >= 4 ? 'ok' : depth >= 2 ? 'warn' : 'danger');
+  depthEl.className   = 'metric-value ' + (depth >= 4 ? 'ok' : depth >= 2 ? 'warn' : 'danger');
 
   const unifEl = document.getElementById('m-uniform');
   unifEl.textContent = r.usura_uniforme ? 'Sì' : 'No';
-  unifEl.className = 'metric-value ' + (r.usura_uniforme ? 'ok' : 'warn');
+  unifEl.className   = 'metric-value ' + (r.usura_uniforme ? 'ok' : 'warn');
   document.getElementById('m-uniform-sub').textContent = r.tipo_usura || '';
 
   const sideEl = document.getElementById('m-side');
   sideEl.textContent = r.condizione_fianco || '—';
-  sideEl.className = 'metric-value ' + (r.condizione_fianco === 'OK' ? 'ok' : r.condizione_fianco === 'DANNEGGIATO' ? 'danger' : 'warn');
-  document.getElementById('m-side-sub').textContent = '';
+  sideEl.className   = 'metric-value ' + (r.condizione_fianco === 'OK' ? 'ok' : r.condizione_fianco === 'DANNEGGIATO' ? 'danger' : 'warn');
 
   const urgEl = document.getElementById('m-urgency');
   urgEl.textContent = (r.urgenza || '—').charAt(0).toUpperCase() + (r.urgenza || '').slice(1);
-  urgEl.className = 'metric-value ' + (r.urgenza === 'bassa' ? 'ok' : r.urgenza === 'media' ? 'warn' : 'danger');
-  document.getElementById('m-urgency-sub').textContent = '';
+  urgEl.className   = 'metric-value ' + (r.urgenza === 'bassa' ? 'ok' : r.urgenza === 'media' ? 'warn' : 'danger');
 
-  // commento
   document.getElementById('ai-comment').textContent = r.commento || '—';
 
-  // reset firma
   clearSignature();
   state.skipSignature = false;
   document.getElementById('btn-skip-sign').textContent = 'Procedi senza firma';
@@ -1481,14 +1774,13 @@ function initSignaturePad() {
   canvas.addEventListener('mousemove', draw);
   canvas.addEventListener('mouseup', end);
   canvas.addEventListener('touchstart', start, { passive: false });
-  canvas.addEventListener('touchmove', draw, { passive: false });
-  canvas.addEventListener('touchend', end, { passive: false });
+  canvas.addEventListener('touchmove', draw,  { passive: false });
+  canvas.addEventListener('touchend',  end,   { passive: false });
 }
 
 function clearSignature() {
   const canvas = document.getElementById('signature-pad');
-  const ctx = state.signaturePad;
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  state.signaturePad.clearRect(0, 0, canvas.width, canvas.height);
   state.hasDrawn = false;
   state.signatureData = null;
   document.getElementById('sign-hint').classList.remove('hidden');
@@ -1500,166 +1792,467 @@ function toggleSignatureRequired() {
   btn.textContent = state.skipSignature ? '✓ Firma non richiesta' : 'Procedi senza firma';
 }
 
-// ── GENERA PDF ─────────────────────────────────
-async function generatePDF() {
-  if (!state.analysisResult) { toast('Nessuna analisi disponibile', 'warn'); return; }
-  if (!state.hasDrawn && !state.skipSignature) {
-    toast('⚠️ Firma il documento o clicca "Procedi senza firma"', 'warn');
+// ── OFFICINE VICINE ────────────────────────────
+function goNearby() {
+  goScreen('nearby');
+  updateNav('nearby');
+  // se abbiamo già un'analisi con esito SOSTITUIRE avvia subito la ricerca
+  if (state.analysisResult && state.nearbyPlaces.length === 0) {
+    startNearbySearch();
+  }
+}
+
+function toggleFilter(type) {
+  state.nearbyFilters[type] = !state.nearbyFilters[type];
+  const chip = document.getElementById(`chip-${type}`);
+  chip.classList.toggle('active', state.nearbyFilters[type]);
+  renderNearbyList();
+}
+
+function refreshNearby() {
+  state.nearbyPlaces = [];
+  startNearbySearch();
+}
+
+async function startNearbySearch() {
+  const placesKey = ls(KEYS.places);
+  if (!placesKey) {
+    toast('⚠️ Configura la Google Places API Key nelle impostazioni', 'warn');
+    goScreen('settings');
+    loadSettings();
     return;
   }
 
-  const r = state.analysisResult;
-  const officina = ls(KEYS.officina) || 'Officina';
-  const tel = ls(KEYS.tel) || '';
-  const addr = ls(KEYS.addr) || '';
-  const piva = ls(KEYS.piva) || '';
+  const listEl   = document.getElementById('nearby-list');
+  const infoBar  = document.getElementById('nearby-info-bar');
+  const infoText = document.getElementById('nearby-info-text');
+  const startBtn = document.getElementById('btn-start-nearby');
 
-  const { jsPDF } = window.jspdf;
-  const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+  infoBar.style.display = 'flex';
+  infoText.textContent  = '📡 Ottengo posizione GPS…';
+  startBtn.disabled     = true;
+  startBtn.textContent  = '⏳ Ricerca in corso…';
 
-  const W = 210, M = 18;
-  let y = 0;
+  listEl.innerHTML = `
+    <div class="nearby-empty">
+      <div style="width:32px;height:32px;border:3px solid var(--border2);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 16px"></div>
+      <p>Ricerca in corso…</p>
+    </div>`;
 
-  // ── sfondo header
-  doc.setFillColor(13, 13, 13);
-  doc.rect(0, 0, W, 42, 'F');
+  try {
+    // 1. geolocation
+    const pos = await new Promise((resolve, reject) => {
+      if (!navigator.geolocation) {
+        reject(new Error('Geolocalizzazione non supportata'));
+        return;
+      }
+      navigator.geolocation.getCurrentPosition(resolve, reject, {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 60000,
+      });
+    });
 
-  // logo placeholder (cerchio)
-  doc.setFillColor(232, 255, 71);
-  doc.circle(M + 8, 21, 8, 'F');
-  doc.setFillColor(13, 13, 13);
-  doc.circle(M + 8, 21, 3.5, 'F');
+    state.userLat = pos.coords.latitude;
+    state.userLng = pos.coords.longitude;
 
-  // testi header
-  doc.setTextColor(240, 240, 240);
-  doc.setFont('helvetica', 'bold');
-  doc.setFontSize(18);
-  doc.text('TireCheck Pro', M + 20, 19);
+    infoText.textContent = `📍 Posizione trovata — ricerca attività…`;
 
-  doc.setFont('helvetica', 'normal');
-  doc.setFontSize(8);
-  doc.setTextColor(136, 136, 136);
-  doc.text('Report Diagnosi Pneumatico · PezzaliApp', M + 20, 26);
+    // 2. costruisci query in base alla marca veicolo
+    const marcaVeicolo = (state.analysisResult?.marca_veicolo ||
+                          document.getElementById('f-marca-veicolo')?.value || '').trim();
 
-  // officina info destra
-  doc.setTextColor(200, 200, 200);
-  doc.setFontSize(8);
-  doc.text(officina, W - M, 16, { align: 'right' });
-  if (tel) doc.text(tel, W - M, 22, { align: 'right' });
-  if (addr) doc.text(addr, W - M, 28, { align: 'right' });
-  if (piva) doc.text(`P.IVA ${piva}`, W - M, 34, { align: 'right' });
+    const queries = [];
 
-  y = 52;
+    // gommisti
+    if (state.nearbyFilters.gommisti) {
+      queries.push({ type: 'gommista',       keyword: 'gommista pneumatici' });
+    }
+    // autofficine
+    if (state.nearbyFilters.autofficine) {
+      queries.push({ type: 'autofficina',    keyword: 'autofficina' });
+    }
+    // concessionarie
+    if (state.nearbyFilters.concessionarie) {
+      const brandQ = marcaVeicolo
+        ? `concessionaria ${marcaVeicolo}`
+        : 'concessionaria auto';
+      queries.push({ type: 'concessionaria', keyword: brandQ });
+    }
 
-  // ── sezione dati veicolo
-  doc.setFillColor(26, 26, 26);
-  doc.roundedRect(M, y, W - M * 2, 36, 3, 3, 'F');
+    if (!queries.length) {
+      toast('Seleziona almeno un filtro', 'warn');
+      startBtn.disabled = false;
+      startBtn.textContent = '📍 Trova vicino a me';
+      return;
+    }
 
-  doc.setTextColor(136, 136, 136);
-  doc.setFont('helvetica', 'normal');
-  doc.setFontSize(7);
-  doc.text('DATI VEICOLO', M + 6, y + 8);
+    // 3. Google Places Nearby Search (New)
+    const allPlaces = [];
+    for (const q of queries) {
+      const places = await nearbyPlacesSearch(placesKey, state.userLat, state.userLng, q.keyword, q.type);
+      allPlaces.push(...places);
+    }
 
-  doc.setTextColor(240, 240, 240);
-  doc.setFont('helvetica', 'bold');
-  doc.setFontSize(11);
-  doc.text(r.targa || '—', M + 6, y + 18);
+    // dedup per place_id
+    const seen = new Set();
+    state.nearbyPlaces = allPlaces.filter(p => {
+      if (seen.has(p.id)) return false;
+      seen.add(p.id);
+      return true;
+    });
 
-  doc.setFont('helvetica', 'normal');
-  doc.setFontSize(9);
-  doc.text(r.posizione, M + 6, y + 26);
+    // ordina per distanza
+    state.nearbyPlaces.sort((a, b) => a.distanza - b.distanza);
 
-  if (r.cliente) {
-    doc.setTextColor(200, 200, 200);
-    doc.text(r.cliente, M + 6, y + 32);
+    infoText.textContent = `Trovati ${state.nearbyPlaces.length} risultati ${marcaVeicolo ? `• Veicolo: ${marcaVeicolo}` : ''}`;
+
+    renderNearbyList();
+
+  } catch (err) {
+    console.error('[TireCheck Nearby]', err);
+    let msg = err.message;
+    if (err.code === 1) msg = 'Accesso alla posizione negato — abilita il GPS';
+    if (err.code === 2) msg = 'Posizione non disponibile';
+    if (err.code === 3) msg = 'Timeout GPS — riprova';
+
+    infoText.textContent = `⚠️ ${msg}`;
+    listEl.innerHTML = `
+      <div class="nearby-empty">
+        <div class="ico">⚠️</div>
+        <p>Errore</p>
+        <small>${msg}</small>
+      </div>`;
+    toast(msg, 'error');
+  } finally {
+    startBtn.disabled    = false;
+    startBtn.textContent = '📍 Trova vicino a me';
+  }
+}
+
+async function nearbyPlacesSearch(apiKey, lat, lng, keyword, tipo) {
+  // Google Places Nearby Search (legacy — compatibile con chiavi standard)
+  // CORS: questa API non accetta chiamate dirette da browser per alcune chiavi
+  // Usiamo Text Search che supporta meglio il CORS con restrizioni per URL
+  const url = `https://maps.googleapis.com/maps/api/place/textsearch/json` +
+    `?query=${encodeURIComponent(keyword)}` +
+    `&location=${lat},${lng}` +
+    `&radius=10000` +
+    `&language=it` +
+    `&key=${apiKey}`;
+
+  // Nota: la Text Search API richiede un proxy lato server per chiamate browser dirette
+  // Utilizziamo l'endpoint tramite fetch con mode no-cors che non restituisce dati,
+  // quindi utilizziamo l'approccio tramite Places JS SDK (dinamico)
+  return await placesTextSearchSDK(apiKey, lat, lng, keyword, tipo);
+}
+
+// Carica dynamicamente Google Maps JS SDK e usa Places
+let googleMapsLoaded = false;
+let googleMapsLoading = false;
+let googleMapsCallbacks = [];
+
+function loadGoogleMaps(apiKey) {
+  return new Promise((resolve, reject) => {
+    if (window.google?.maps?.places) { resolve(); return; }
+    if (googleMapsLoading) { googleMapsCallbacks.push({ resolve, reject }); return; }
+    googleMapsLoading = true;
+    googleMapsCallbacks.push({ resolve, reject });
+
+    window.__tcGoogleMapsInit = () => {
+      googleMapsLoaded = true;
+      googleMapsCallbacks.forEach(cb => cb.resolve());
+      googleMapsCallbacks = [];
+    };
+
+    const script = document.createElement('script');
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places&callback=__tcGoogleMapsInit&language=it`;
+    script.onerror = () => {
+      const err = new Error('Impossibile caricare Google Maps SDK — verifica la Places API Key');
+      googleMapsCallbacks.forEach(cb => cb.reject(err));
+      googleMapsCallbacks = [];
+      googleMapsLoading = false;
+    };
+    document.head.appendChild(script);
+  });
+}
+
+async function placesTextSearchSDK(apiKey, lat, lng, keyword, tipo) {
+  await loadGoogleMaps(apiKey);
+
+  return new Promise((resolve) => {
+    const service = new google.maps.places.PlacesService(
+      document.createElement('div')
+    );
+
+    const request = {
+      query: keyword,
+      location: new google.maps.LatLng(lat, lng),
+      radius: 10000,
+      language: 'it',
+    };
+
+    service.textSearch(request, (results, status) => {
+      if (status !== google.maps.places.PlacesServiceStatus.OK || !results) {
+        resolve([]);
+        return;
+      }
+
+      const places = results.slice(0, 5).map(p => {
+        const plLat = p.geometry?.location?.lat() || 0;
+        const plLng = p.geometry?.location?.lng() || 0;
+        const dist  = haversine(lat, lng, plLat, plLng);
+
+        return {
+          id:       p.place_id,
+          nome:     p.name,
+          indirizzo: p.formatted_address || p.vicinity || '',
+          telefono: p.formatted_phone_number || null,
+          rating:   p.rating || null,
+          n_reviews: p.user_ratings_total || 0,
+          aperto:   p.opening_hours?.open_now ?? null,
+          tipo,
+          lat: plLat,
+          lng: plLng,
+          distanza: dist,
+          place_id: p.place_id,
+          // per recuperare il telefono serve un secondo detail call
+          _needsDetail: !p.formatted_phone_number,
+        };
+      });
+
+      // recupera telefoni mancanti (max 3 per non esaurire quote)
+      const detailPromises = places
+        .filter(p => p._needsDetail)
+        .slice(0, 3)
+        .map(p => fetchPlaceDetail(service, p));
+
+      Promise.allSettled(detailPromises).then(() => resolve(places));
+    });
+  });
+}
+
+function fetchPlaceDetail(service, place) {
+  return new Promise(resolve => {
+    service.getDetails(
+      { placeId: place.place_id, fields: ['formatted_phone_number', 'opening_hours', 'website'] },
+      (detail, status) => {
+        if (status === google.maps.places.PlacesServiceStatus.OK && detail) {
+          place.telefono    = detail.formatted_phone_number || null;
+          place.aperto      = detail.opening_hours?.isOpen?.() ?? place.aperto;
+          place.website     = detail.website || null;
+          place._needsDetail = false;
+        }
+        resolve();
+      }
+    );
+  });
+}
+
+function haversine(lat1, lng1, lat2, lng2) {
+  const R = 6371000;
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLng = (lng2 - lng1) * Math.PI / 180;
+  const a = Math.sin(dLat/2)**2 +
+            Math.cos(lat1 * Math.PI/180) * Math.cos(lat2 * Math.PI/180) *
+            Math.sin(dLng/2)**2;
+  return Math.round(R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)));
+}
+
+function fmtDist(m) {
+  return m >= 1000 ? `${(m/1000).toFixed(1)} km` : `${m} m`;
+}
+
+function renderNearbyList() {
+  const listEl = document.getElementById('nearby-list');
+
+  const visible = state.nearbyPlaces.filter(p => state.nearbyFilters[p.tipo] !== false);
+
+  if (!visible.length) {
+    listEl.innerHTML = `
+      <div class="nearby-empty">
+        <div class="ico">🔍</div>
+        <p>Nessun risultato</p>
+        <small>Prova ad attivare altri filtri o allarga la ricerca</small>
+      </div>`;
+    return;
   }
 
-  // marca + misura a destra
-  doc.setTextColor(136, 136, 136);
+  const tipoLabel = { gommista: '🔧 Gommista', autofficina: '🛠️ Autofficina', concessionaria: '🏢 Concessionaria' };
+
+  listEl.innerHTML = visible.map(p => {
+    const stars   = p.rating ? `⭐ ${p.rating.toFixed(1)}` + (p.n_reviews ? ` (${p.n_reviews})` : '') : '';
+    const apertoHtml = p.aperto === true
+      ? '<span class="nearby-open open">● Aperto ora</span>'
+      : p.aperto === false
+        ? '<span class="nearby-open closed">● Chiuso</span>'
+        : '';
+
+    const callBtn = p.telefono
+      ? `<a class="nearby-btn call" href="tel:${p.telefono.replace(/\s/g,'')}">📞 ${p.telefono}</a>`
+      : `<span class="nearby-btn" style="opacity:.4;cursor:default">📞 Tel N/D</span>`;
+
+    const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(p.nome)}&query_place_id=${p.place_id}`;
+
+    return `
+      <div class="nearby-place">
+        <div class="nearby-place-header">
+          <div class="nearby-place-name">${p.nome}</div>
+          <div class="nearby-place-type">${tipoLabel[p.tipo] || p.tipo}</div>
+        </div>
+        <div class="nearby-place-info">
+          <div class="nearby-place-addr">${p.indirizzo}</div>
+          <div class="nearby-place-meta">
+            <span class="nearby-dist">📍 ${fmtDist(p.distanza)}</span>
+            ${stars ? `<span class="nearby-rating">${stars}</span>` : ''}
+            ${apertoHtml}
+          </div>
+        </div>
+        <div class="nearby-actions">
+          ${callBtn}
+          <a class="nearby-btn map" href="${mapsUrl}" target="_blank" rel="noopener">🗺️ Mappa</a>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+// ── GENERA PDF ─────────────────────────────────
+async function generatePDF() {
+  if (!state.analysisResult) {
+    toast('Nessun risultato da esportare', 'warn');
+    return;
+  }
+  if (!state.hasDrawn && !state.skipSignature) {
+    toast('⚠️ Firma il documento o premi "Procedi senza firma"', 'warn');
+    return;
+  }
+
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ unit: 'mm', format: 'a4', orientation: 'portrait' });
+  const W = 210; const M = 14;
+  let y = 14;
+
+  const r = state.analysisResult;
+
+  // header
+  doc.setFillColor(13, 13, 13);
+  doc.rect(0, 0, W, 28, 'F');
+  doc.setTextColor(232, 255, 71);
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(16);
+  doc.text('TireCheck Pro', M, 11);
+  doc.setFont('helvetica', 'normal');
   doc.setFontSize(7);
-  doc.text('PNEUMATICO', W - M - 6, y + 8, { align: 'right' });
+  doc.setTextColor(136, 136, 136);
+  doc.text('by PezzaliApp', M, 16);
+
+  const officina = ls(KEYS.officina) || 'Officina';
+  const tel      = ls(KEYS.tel) || '';
+  const addr     = ls(KEYS.addr) || '';
+  doc.setTextColor(240, 240, 240);
+  doc.setFontSize(9);
+  doc.setFont('helvetica', 'bold');
+  doc.text(officina, W - M, 10, { align: 'right' });
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(7);
+  doc.setTextColor(136, 136, 136);
+  if (tel)  doc.text(tel,  W - M, 15, { align: 'right' });
+  if (addr) doc.text(addr, W - M, 20, { align: 'right' });
+  y = 36;
+
+  // titolo report
   doc.setTextColor(240, 240, 240);
   doc.setFont('helvetica', 'bold');
-  doc.setFontSize(10);
-  doc.text(r.marca || '—', W - M - 6, y + 18, { align: 'right' });
-  doc.setFont('helvetica', 'normal');
-  doc.setFontSize(9);
-  doc.text(r.misura || '—', W - M - 6, y + 26, { align: 'right' });
-
-  // data/ora
-  const dt = new Date(r.timestamp);
-  const dateStr = dt.toLocaleDateString('it-IT') + ' ' + dt.toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' });
-  doc.setTextColor(136, 136, 136);
-  doc.setFontSize(7);
-  doc.text(dateStr, W - M - 6, y + 32, { align: 'right' });
-
-  y += 44;
-
-  // ── ESITO principale
-  const esitoColor = r.esito === 'OK' ? [46, 213, 115] : r.esito === 'ATTENZIONE' ? [255, 165, 2] : [255, 71, 87];
-  doc.setFillColor(...esitoColor);
-  doc.roundedRect(M, y, W - M * 2, 18, 3, 3, 'F');
-  doc.setTextColor(r.esito === 'ATTENZIONE' ? 30 : 255, r.esito === 'ATTENZIONE' ? 30 : 255, r.esito === 'ATTENZIONE' ? 30 : 255);
-  doc.setFont('helvetica', 'bold');
   doc.setFontSize(13);
-  doc.text(`ESITO: ${r.esito}`, W / 2, y + 12, { align: 'center' });
+  doc.text('Report Analisi Pneumatico', M, y);
+  y += 6;
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(8);
+  doc.setTextColor(136, 136, 136);
+  doc.text(new Date(r.timestamp).toLocaleString('it-IT'), M, y);
+  y += 8;
 
+  // veicolo
+  doc.setFillColor(26, 26, 26);
+  doc.roundedRect(M, y, W - M * 2, 20, 3, 3, 'F');
+  doc.setTextColor(232, 255, 71);
+  doc.setFontSize(8);
+  doc.setFont('helvetica', 'bold');
+  doc.text('VEICOLO', M + 4, y + 5);
+  doc.setTextColor(240, 240, 240);
+  doc.setFontSize(10);
+  doc.text(r.targa || 'N/D', M + 4, y + 11);
+  doc.setFontSize(8);
+  doc.setTextColor(136, 136, 136);
+  const veicInfo = [r.posizione, r.marca_veicolo, r.cliente].filter(Boolean).join(' · ');
+  doc.text(veicInfo, M + 4, y + 17);
   y += 26;
 
-  // ── METRICHE griglia 2x2
-  const metrics = [
-    { label: 'Profondità stimata', value: `${r.profondita_mm ?? '?'} mm`, sub: 'min. legale 1.6mm' },
-    { label: 'Usura uniforme', value: r.usura_uniforme ? 'Sì' : 'No', sub: r.tipo_usura || '' },
-    { label: 'Condizione fianco', value: r.condizione_fianco || '—', sub: '' },
-    { label: 'Urgenza', value: (r.urgenza || '—').charAt(0).toUpperCase() + (r.urgenza || '').slice(1), sub: '' },
-  ];
+  // pneumatico
+  doc.setFillColor(26, 26, 26);
+  doc.roundedRect(M, y, W - M * 2, 22, 3, 3, 'F');
+  doc.setTextColor(232, 255, 71);
+  doc.setFontSize(8);
+  doc.setFont('helvetica', 'bold');
+  doc.text('PNEUMATICO', M + 4, y + 5);
+  doc.setTextColor(240, 240, 240);
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(9);
+  const tireRow = [r.marca_gomma, r.misura].filter(Boolean).join(' — ') || 'N/D';
+  doc.text(tireRow, M + 4, y + 11);
+  doc.setFontSize(8);
+  doc.setTextColor(136, 136, 136);
+  const dotRow = [r.dot ? `DOT: ${r.dot}` : '', r.anno_produzione ? `Anno prod.: ${r.anno_produzione}` : ''].filter(Boolean).join('  ·  ');
+  if (dotRow) doc.text(dotRow, M + 4, y + 18);
+  y += 28;
 
-  const cellW = (W - M * 2 - 4) / 2;
-  const cellH = 22;
-  metrics.forEach((mt, i) => {
-    const cx = M + (i % 2) * (cellW + 4);
-    const cy = y + Math.floor(i / 2) * (cellH + 4);
+  // esito
+  const esitoColor = r.esito === 'OK' ? [46,213,115] : r.esito === 'ATTENZIONE' ? [255,165,2] : [255,71,87];
+  doc.setFillColor(...esitoColor, 30);
+  doc.roundedRect(M, y, W - M * 2, 14, 3, 3, 'F');
+  doc.setTextColor(...esitoColor);
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(11);
+  doc.text(`ESITO: ${r.esito}`, M + 4, y + 9);
+  y += 20;
+
+  // metriche
+  const cols = [
+    ['Profondità', `${r.profondita_mm ?? '?'} mm`],
+    ['Usura unif.', r.usura_uniforme ? 'Sì' : 'No'],
+    ['Fianco',     r.condizione_fianco || '—'],
+    ['Urgenza',    r.urgenza || '—'],
+  ];
+  const cw = (W - M * 2 - 9) / 4;
+  cols.forEach(([label, val], i) => {
+    const x = M + i * (cw + 3);
     doc.setFillColor(26, 26, 26);
-    doc.roundedRect(cx, cy, cellW, cellH, 2, 2, 'F');
+    doc.roundedRect(x, y, cw, 18, 2, 2, 'F');
     doc.setTextColor(136, 136, 136);
     doc.setFont('helvetica', 'normal');
-    doc.setFontSize(7);
-    doc.text(mt.label.toUpperCase(), cx + 5, cy + 7);
+    doc.setFontSize(6);
+    doc.text(label.toUpperCase(), x + 3, y + 5);
     doc.setTextColor(240, 240, 240);
     doc.setFont('helvetica', 'bold');
-    doc.setFontSize(10);
-    doc.text(mt.value, cx + 5, cy + 15);
-    if (mt.sub) {
-      doc.setFont('helvetica', 'normal');
-      doc.setFontSize(6.5);
-      doc.setTextColor(100, 100, 100);
-      doc.text(mt.sub, cx + 5, cy + 20);
-    }
+    doc.setFontSize(9);
+    doc.text(val, x + 3, y + 13);
   });
+  y += 24;
 
-  y += cellH * 2 + 12;
-
-  // ── VALUTAZIONE AI
-  doc.setFillColor(26, 26, 26);
-  const commentLines = doc.splitTextToSize(r.commento || '', W - M * 2 - 14);
-  const commentH = 14 + commentLines.length * 5;
-  doc.roundedRect(M, y, W - M * 2, commentH, 3, 3, 'F');
-  // bordo sinistro accent
-  doc.setFillColor(232, 255, 71);
-  doc.rect(M, y, 3, commentH, 'F');
-
+  // commento
+  doc.setFillColor(20, 20, 20);
+  doc.roundedRect(M, y, 3, 22, 1.5, 1.5, 'F');
+  doc.setFillColor(232, 255, 71, 60);
+  doc.roundedRect(M, y, 3, 22, 1.5, 1.5, 'F');
   doc.setTextColor(136, 136, 136);
   doc.setFont('helvetica', 'normal');
-  doc.setFontSize(7);
-  doc.text('VALUTAZIONE AI', M + 8, y + 8);
-  doc.setTextColor(200, 200, 200);
-  doc.setFontSize(9);
-  doc.text(commentLines, M + 8, y + 15);
+  doc.setFontSize(8);
+  const commentLines = doc.splitTextToSize(r.commento || '', W - M * 2 - 8);
+  doc.text(commentLines, M + 6, y + 5);
+  y += commentLines.length * 4 + 10;
 
-  y += commentH + 12;
-
-  // ── IMMAGINE PNEUMATICO
-  if (state.currentImage && y < 200) {
+  // immagine
+  if (state.currentImage) {
     try {
       const imgH = 45;
       doc.setFillColor(26, 26, 26);
@@ -1669,7 +2262,7 @@ async function generatePDF() {
     y += 56;
   }
 
-  // ── FIRMA
+  // firma
   const signY = Math.max(y, 220);
   doc.setDrawColor(50, 50, 50);
   doc.setLineWidth(0.3);
@@ -1680,9 +2273,7 @@ async function generatePDF() {
   doc.text('FIRMA CLIENTE', M, signY + 25);
 
   if (state.hasDrawn && state.signatureData) {
-    try {
-      doc.addImage(state.signatureData, 'PNG', M, signY, 70, 18);
-    } catch(e) {}
+    try { doc.addImage(state.signatureData, 'PNG', M, signY, 70, 18); } catch(e) {}
   }
 
   // footer
@@ -1692,7 +2283,6 @@ async function generatePDF() {
   doc.setFontSize(7);
   doc.text('Generato da TireCheck Pro · PezzaliApp', W / 2, 291, { align: 'center' });
 
-  // salva
   const filename = `TireCheck_${r.targa || 'report'}_${new Date().toISOString().slice(0,10)}.pdf`;
   doc.save(filename);
   toast('📄 PDF scaricato!', 'success');
@@ -1701,32 +2291,30 @@ async function generatePDF() {
 // ── WEBHOOK MAKE.COM ───────────────────────────
 async function sendWebhook() {
   const url = ls(KEYS.webhook);
-  if (!url) {
-    toast('⚠️ Configura il webhook Make.com nelle impostazioni', 'warn');
-    return;
-  }
-  if (!state.analysisResult) {
-    toast('Nessuna analisi da inviare', 'warn');
-    return;
-  }
+  if (!url) { toast('⚠️ Configura il webhook Make.com nelle impostazioni', 'warn'); return; }
+  if (!state.analysisResult) { toast('Nessuna analisi da inviare', 'warn'); return; }
 
+  const r = state.analysisResult;
   const payload = {
     source: 'TireCheck Pro',
     timestamp: new Date().toISOString(),
-    officina: ls(KEYS.officina) || '',
-    targa: state.analysisResult.targa,
-    posizione: state.analysisResult.posizione,
-    cliente: state.analysisResult.cliente,
-    marca: state.analysisResult.marca,
-    misura: state.analysisResult.misura,
-    esito: state.analysisResult.esito,
-    profondita_mm: state.analysisResult.profondita_mm,
-    usura_uniforme: state.analysisResult.usura_uniforme,
-    tipo_usura: state.analysisResult.tipo_usura,
-    condizione_fianco: state.analysisResult.condizione_fianco,
-    urgenza: state.analysisResult.urgenza,
-    commento: state.analysisResult.commento,
-    firma_cliente: state.hasDrawn ? 'presente' : 'assente',
+    officina:         ls(KEYS.officina) || '',
+    targa:            r.targa,
+    posizione:        r.posizione,
+    cliente:          r.cliente,
+    marca_veicolo:    r.marca_veicolo,
+    marca_gomma:      r.marca_gomma,
+    misura:           r.misura,
+    dot:              r.dot,
+    anno_produzione:  r.anno_produzione,
+    esito:            r.esito,
+    profondita_mm:    r.profondita_mm,
+    usura_uniforme:   r.usura_uniforme,
+    tipo_usura:       r.tipo_usura,
+    condizione_fianco: r.condizione_fianco,
+    urgenza:          r.urgenza,
+    commento:         r.commento,
+    firma_cliente:    state.hasDrawn ? 'presente' : 'assente',
   };
 
   try {
@@ -1736,11 +2324,8 @@ async function sendWebhook() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
     });
-    if (res.ok) {
-      toast('✅ Dati inviati a Make.com!', 'success');
-    } else {
-      throw new Error(`HTTP ${res.status}`);
-    }
+    if (res.ok) toast('✅ Dati inviati a Make.com!', 'success');
+    else throw new Error(`HTTP ${res.status}`);
   } catch (e) {
     toast(`Errore webhook: ${e.message}`, 'error');
   }
@@ -1750,7 +2335,6 @@ async function sendWebhook() {
 function saveToHistory(r) {
   const history = getHistory();
   history.unshift({ ...r, id: Date.now() });
-  // max 50 voci
   if (history.length > 50) history.pop();
   localStorage.setItem(KEYS.history, JSON.stringify(history));
 }
@@ -1762,7 +2346,7 @@ function getHistory() {
 
 function loadHistory() {
   const history = getHistory();
-  const list = document.getElementById('history-list');
+  const list  = document.getElementById('history-list');
   const count = document.getElementById('history-count');
   count.textContent = `${history.length} analisi`;
 
@@ -1778,13 +2362,14 @@ function loadHistory() {
   list.innerHTML = history.map(r => {
     const esitoMap = { OK: '✅', ATTENZIONE: '⚠️', SOSTITUIRE: '🔴' };
     const dt = new Date(r.timestamp).toLocaleDateString('it-IT') + ' ' +
-               new Date(r.timestamp).toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' });
+               new Date(r.timestamp).toLocaleTimeString('it-IT', { hour:'2-digit', minute:'2-digit' });
     return `
       <div class="history-item" onclick="openDetail(${r.id})">
         ${r.image ? `<img class="history-thumb" src="${r.image}" alt="gomma">` : '<div class="history-thumb"></div>'}
         <div class="history-info">
           <div class="history-plate">${r.targa || 'N/D'} · ${r.posizione}</div>
           <div class="history-meta">${esitoMap[r.esito] || ''} ${r.esito} · ${dt}</div>
+          ${r.misura ? `<div class="history-meta" style="color:var(--text3)">${r.misura}${r.dot ? ' · DOT: ' + r.dot : ''}</div>` : ''}
           ${r.cliente ? `<div class="history-meta" style="color:var(--text3)">${r.cliente}</div>` : ''}
         </div>
       </div>`;
@@ -1803,7 +2388,8 @@ function openDetail(id) {
     <div style="display:flex;align-items:center;justify-content:space-between;margin-top:8px">
       <div>
         <div style="font-size:18px;font-weight:800">${r.targa || 'N/D'}</div>
-        <div style="font-family:var(--font-mono);font-size:10px;color:var(--text2)">${r.posizione} · ${r.marca || ''} ${r.misura || ''}</div>
+        <div style="font-family:var(--font-mono);font-size:10px;color:var(--text2)">${r.posizione}${r.marca_veicolo ? ' · ' + r.marca_veicolo : ''}${r.marca_gomma ? ' · ' + r.marca_gomma : ''} ${r.misura || ''}</div>
+        ${r.dot ? `<div style="font-family:var(--font-mono);font-size:10px;color:var(--text3)">DOT: ${r.dot}${r.anno_produzione ? ' · ' + r.anno_produzione : ''}</div>` : ''}
         <div style="font-family:var(--font-mono);font-size:10px;color:var(--text3)">${dt}</div>
       </div>
       <div style="font-size:24px;font-weight:900;color:${esitoColor}">${r.esito}</div>
@@ -1843,23 +2429,27 @@ function closeModal(e) {
 // ── IMPOSTAZIONI ───────────────────────────────
 function loadSettings() {
   document.getElementById('s-gemini-key').value = ls(KEYS.gemini) || '';
-  document.getElementById('s-webhook').value = ls(KEYS.webhook) || '';
-  document.getElementById('s-officina').value = ls(KEYS.officina) || '';
-  document.getElementById('s-tel').value = ls(KEYS.tel) || '';
-  document.getElementById('s-addr').value = ls(KEYS.addr) || '';
-  document.getElementById('s-piva').value = ls(KEYS.piva) || '';
+  document.getElementById('s-places-key').value = ls(KEYS.places) || '';
+  document.getElementById('s-webhook').value    = ls(KEYS.webhook) || '';
+  document.getElementById('s-officina').value   = ls(KEYS.officina) || '';
+  document.getElementById('s-tel').value        = ls(KEYS.tel) || '';
+  document.getElementById('s-addr').value       = ls(KEYS.addr) || '';
+  document.getElementById('s-piva').value       = ls(KEYS.piva) || '';
 }
 
 function saveSettings() {
   const key = document.getElementById('s-gemini-key').value.trim();
   if (key) localStorage.setItem(KEYS.gemini, key);
+  const pk = document.getElementById('s-places-key').value.trim();
+  if (pk) localStorage.setItem(KEYS.places, pk);
   const wh = document.getElementById('s-webhook').value.trim();
   if (wh) localStorage.setItem(KEYS.webhook, wh);
   localStorage.setItem(KEYS.officina, document.getElementById('s-officina').value.trim());
-  localStorage.setItem(KEYS.tel, document.getElementById('s-tel').value.trim());
-  localStorage.setItem(KEYS.addr, document.getElementById('s-addr').value.trim());
-  localStorage.setItem(KEYS.piva, document.getElementById('s-piva').value.trim());
+  localStorage.setItem(KEYS.tel,      document.getElementById('s-tel').value.trim());
+  localStorage.setItem(KEYS.addr,     document.getElementById('s-addr').value.trim());
+  localStorage.setItem(KEYS.piva,     document.getElementById('s-piva').value.trim());
   toast('✅ Impostazioni salvate', 'success');
+  loadHome();
 }
 
 function clearHistory() {
@@ -1877,12 +2467,18 @@ function newScan() {
   state.signatureData = null;
   state.hasDrawn = false;
   state.skipSignature = false;
+  state.ocrAnno = null;
 
   document.getElementById('preview-img').style.display = 'none';
   document.getElementById('cam-placeholder').style.display = 'flex';
   document.getElementById('btn-analyze').disabled = true;
   document.getElementById('f-targa').value = '';
   document.getElementById('f-cliente').value = '';
+  document.getElementById('f-misura').value = '';
+  document.getElementById('f-dot').value = '';
+  document.getElementById('f-marca').value = '';
+  document.getElementById('f-marca-veicolo').value = '';
+  document.getElementById('ocr-banner').classList.remove('visible');
 
   goScreen('scan');
   updateNav('scan');
