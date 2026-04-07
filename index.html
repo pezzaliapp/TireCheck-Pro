@@ -1298,19 +1298,6 @@
     </div>
 
     <div class="settings-section">
-      <div class="section-label">Google Places API</div>
-      <div class="api-info">
-        <strong>📍 Officine vicine:</strong> necessaria per trovare gommisti,
-        autofficine e concessionarie tramite Google Maps Places API.<br>
-        Ottienila su <strong>console.cloud.google.com</strong> → Places API (New).
-      </div>
-      <div class="field">
-        <label>Places API Key</label>
-        <input type="password" id="s-places-key" placeholder="AIzaSy…" autocomplete="off">
-      </div>
-    </div>
-
-    <div class="settings-section">
       <div class="section-label">Make.com Webhook</div>
       <div class="field">
         <label>Webhook URL</label>
@@ -1387,8 +1374,7 @@
       <h2 style="font-size:20px;font-weight:800;margin-bottom:6px">Benvenuto in TireCheck Pro</h2>
       <p style="font-family:var(--font-mono);font-size:11px;color:var(--text2);line-height:1.7">
         Per usare l'analisi AI inserisci la tua <strong style="color:var(--accent)">Gemini API Key</strong> gratuita.<br>
-        Vai su <strong>aistudio.google.com</strong> → Get API Key → crea chiave gratuita.<br><br>
-        Per trovare officine vicine inserisci anche la <strong style="color:var(--accent)">Google Places API Key</strong>.
+        Vai su <strong>aistudio.google.com</strong> → Get API Key → crea chiave gratuita.
       </p>
     </div>
     <button class="btn btn-primary" onclick="closeOnboarding()">Configura ora →</button>
@@ -1412,7 +1398,6 @@ const state = {
   isDrawing: false,
   hasDrawn: false,
   skipSignature: false,
-  // nearby
   nearbyPlaces: [],
   nearbyFilters: { gommisti: true, autofficine: true, concessionarie: true },
   userLat: null,
@@ -1422,7 +1407,6 @@ const state = {
 // ── STORAGE KEYS ───────────────────────────────
 const KEYS = {
   gemini:    'tirecheck-gemini-key',
-  places:    'tirecheck-places-key',
   webhook:   'tirecheck-webhook',
   officina:  'tirecheck-officina',
   tel:       'tirecheck-tel',
@@ -1463,7 +1447,6 @@ function goScreen(name) {
 // ── LOAD HOME ──────────────────────────────────
 function loadHome() {
   const key      = ls(KEYS.gemini);
-  const places   = ls(KEYS.places);
   const officina = ls(KEYS.officina);
   const webhook  = ls(KEYS.webhook);
 
@@ -1484,9 +1467,7 @@ function loadHome() {
     ? '<span style="color:var(--ok)">✅</span> Make.com webhook configurato'
     : '<span style="color:var(--text3)">○</span> Webhook Make.com non configurato';
 
-  if (placesEl) placesEl.innerHTML = places
-    ? '<span style="color:var(--ok)">✅</span> Google Places API Key configurata'
-    : '<span style="color:var(--text3)">○</span> Places API Key mancante (officine vicine)';
+  if (placesEl) placesEl.innerHTML = '<span style="color:var(--ok)">✅</span> Officine vicine via Google Maps (no API key)';
 
   const history = getHistory();
   const okCount     = history.filter(h => h.esito === 'OK').length;
@@ -1964,33 +1945,19 @@ function toggleSignatureRequired() {
 function goNearby() {
   goScreen('nearby');
   updateNav('nearby');
-  // se abbiamo già un'analisi con esito SOSTITUIRE avvia subito la ricerca
-  if (state.analysisResult && state.nearbyPlaces.length === 0) {
-    startNearbySearch();
-  }
 }
 
 function toggleFilter(type) {
   state.nearbyFilters[type] = !state.nearbyFilters[type];
-  const chip = document.getElementById(`chip-${type}`);
-  chip.classList.toggle('active', state.nearbyFilters[type]);
-  renderNearbyList();
+  document.getElementById(`chip-${type}`).classList.toggle('active', state.nearbyFilters[type]);
+  renderNearbyLinks();
 }
 
 function refreshNearby() {
-  state.nearbyPlaces = [];
   startNearbySearch();
 }
 
 async function startNearbySearch() {
-  const placesKey = ls(KEYS.places);
-  if (!placesKey) {
-    toast('⚠️ Configura la Google Places API Key nelle impostazioni', 'warn');
-    goScreen('settings');
-    loadSettings();
-    return;
-  }
-
   const listEl   = document.getElementById('nearby-list');
   const infoBar  = document.getElementById('nearby-info-bar');
   const infoText = document.getElementById('nearby-info-text');
@@ -1999,96 +1966,42 @@ async function startNearbySearch() {
   infoBar.style.display = 'flex';
   infoText.textContent  = '📡 Ottengo posizione GPS…';
   startBtn.disabled     = true;
-  startBtn.textContent  = '⏳ Ricerca in corso…';
+  startBtn.textContent  = '⏳ Localizzazione…';
 
   listEl.innerHTML = `
     <div class="nearby-empty">
       <div style="width:32px;height:32px;border:3px solid var(--border2);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 16px"></div>
-      <p>Ricerca in corso…</p>
+      <p>Ottengo posizione…</p>
     </div>`;
 
   try {
-    // 1. geolocation
     const pos = await new Promise((resolve, reject) => {
-      if (!navigator.geolocation) {
-        reject(new Error('Geolocalizzazione non supportata'));
-        return;
-      }
+      if (!navigator.geolocation) { reject(new Error('GPS non supportato')); return; }
       navigator.geolocation.getCurrentPosition(resolve, reject, {
-        enableHighAccuracy: true,
-        timeout: 10000,
-        maximumAge: 60000,
+        enableHighAccuracy: true, timeout: 10000, maximumAge: 60000,
       });
     });
 
     state.userLat = pos.coords.latitude;
     state.userLng = pos.coords.longitude;
 
-    infoText.textContent = `📍 Posizione trovata — ricerca attività…`;
-
-    // 2. costruisci query in base alla marca veicolo
     const marcaVeicolo = (state.analysisResult?.marca_veicolo ||
                           document.getElementById('f-marca-veicolo')?.value || '').trim();
 
-    const queries = [];
+    infoText.textContent = `📍 Posizione trovata${marcaVeicolo ? ' · Veicolo: ' + marcaVeicolo : ''}`;
 
-    // gommisti
-    if (state.nearbyFilters.gommisti) {
-      queries.push({ type: 'gommista',       keyword: 'gommista pneumatici' });
-    }
-    // autofficine
-    if (state.nearbyFilters.autofficine) {
-      queries.push({ type: 'autofficina',    keyword: 'autofficina' });
-    }
-    // concessionarie
-    if (state.nearbyFilters.concessionarie) {
-      const brandQ = marcaVeicolo
-        ? `concessionaria ${marcaVeicolo}`
-        : 'concessionaria auto';
-      queries.push({ type: 'concessionaria', keyword: brandQ });
-    }
-
-    if (!queries.length) {
-      toast('Seleziona almeno un filtro', 'warn');
-      startBtn.disabled = false;
-      startBtn.textContent = '📍 Trova vicino a me';
-      return;
-    }
-
-    // 3. Google Places Nearby Search (New)
-    const allPlaces = [];
-    for (const q of queries) {
-      const places = await nearbyPlacesSearch(placesKey, state.userLat, state.userLng, q.keyword, q.type);
-      allPlaces.push(...places);
-    }
-
-    // dedup per place_id
-    const seen = new Set();
-    state.nearbyPlaces = allPlaces.filter(p => {
-      if (seen.has(p.id)) return false;
-      seen.add(p.id);
-      return true;
-    });
-
-    // ordina per distanza
-    state.nearbyPlaces.sort((a, b) => a.distanza - b.distanza);
-
-    infoText.textContent = `Trovati ${state.nearbyPlaces.length} risultati ${marcaVeicolo ? `• Veicolo: ${marcaVeicolo}` : ''}`;
-
-    renderNearbyList();
+    renderNearbyLinks(marcaVeicolo);
 
   } catch (err) {
-    console.error('[TireCheck Nearby]', err);
     let msg = err.message;
-    if (err.code === 1) msg = 'Accesso alla posizione negato — abilita il GPS';
+    if (err.code === 1) msg = 'Accesso GPS negato — abilitalo nelle impostazioni del browser';
     if (err.code === 2) msg = 'Posizione non disponibile';
     if (err.code === 3) msg = 'Timeout GPS — riprova';
-
     infoText.textContent = `⚠️ ${msg}`;
     listEl.innerHTML = `
       <div class="nearby-empty">
         <div class="ico">⚠️</div>
-        <p>Errore</p>
+        <p>Errore GPS</p>
         <small>${msg}</small>
       </div>`;
     toast(msg, 'error');
@@ -2098,190 +2011,80 @@ async function startNearbySearch() {
   }
 }
 
-async function nearbyPlacesSearch(apiKey, lat, lng, keyword, tipo) {
-  // Google Places Nearby Search (legacy — compatibile con chiavi standard)
-  // CORS: questa API non accetta chiamate dirette da browser per alcune chiavi
-  // Usiamo Text Search che supporta meglio il CORS con restrizioni per URL
-  const url = `https://maps.googleapis.com/maps/api/place/textsearch/json` +
-    `?query=${encodeURIComponent(keyword)}` +
-    `&location=${lat},${lng}` +
-    `&radius=10000` +
-    `&language=it` +
-    `&key=${apiKey}`;
+function renderNearbyLinks(marcaVeicolo) {
+  if (state.userLat === null) return;
 
-  // Nota: la Text Search API richiede un proxy lato server per chiamate browser dirette
-  // Utilizziamo l'endpoint tramite fetch con mode no-cors che non restituisce dati,
-  // quindi utilizziamo l'approccio tramite Places JS SDK (dinamico)
-  return await placesTextSearchSDK(apiKey, lat, lng, keyword, tipo);
-}
+  const marca = marcaVeicolo ||
+                (state.analysisResult?.marca_veicolo || '') ||
+                document.getElementById('f-marca-veicolo')?.value || '';
 
-// Carica dynamicamente Google Maps JS SDK e usa Places
-let googleMapsLoaded = false;
-let googleMapsLoading = false;
-let googleMapsCallbacks = [];
+  const lat = state.userLat;
+  const lng = state.userLng;
 
-function loadGoogleMaps(apiKey) {
-  return new Promise((resolve, reject) => {
-    if (window.google?.maps?.places) { resolve(); return; }
-    if (googleMapsLoading) { googleMapsCallbacks.push({ resolve, reject }); return; }
-    googleMapsLoading = true;
-    googleMapsCallbacks.push({ resolve, reject });
+  // Costruisce URL Google Maps search centrati sulla posizione
+  const queries = {
+    gommisti: {
+      label: '🔧 Gommisti / Pneumatici',
+      tipo: 'gommista',
+      q: 'gommista pneumatici vicino a me',
+    },
+    autofficine: {
+      label: '🛠️ Autofficine',
+      tipo: 'autofficina',
+      q: 'autofficina meccanico vicino a me',
+    },
+    concessionarie: {
+      label: marca ? `🏢 Concessionarie ${marca}` : '🏢 Concessionarie Auto',
+      tipo: 'concessionaria',
+      q: marca ? `concessionaria ${marca} vicino a me` : 'concessionaria auto vicino a me',
+    },
+  };
 
-    window.__tcGoogleMapsInit = () => {
-      googleMapsLoaded = true;
-      googleMapsCallbacks.forEach(cb => cb.resolve());
-      googleMapsCallbacks = [];
-    };
-
-    const script = document.createElement('script');
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places&callback=__tcGoogleMapsInit&language=it`;
-    script.onerror = () => {
-      const err = new Error('Impossibile caricare Google Maps SDK — verifica la Places API Key');
-      googleMapsCallbacks.forEach(cb => cb.reject(err));
-      googleMapsCallbacks = [];
-      googleMapsLoading = false;
-    };
-    document.head.appendChild(script);
-  });
-}
-
-async function placesTextSearchSDK(apiKey, lat, lng, keyword, tipo) {
-  await loadGoogleMaps(apiKey);
-
-  return new Promise((resolve) => {
-    const service = new google.maps.places.PlacesService(
-      document.createElement('div')
-    );
-
-    const request = {
-      query: keyword,
-      location: new google.maps.LatLng(lat, lng),
-      radius: 10000,
-      language: 'it',
-    };
-
-    service.textSearch(request, (results, status) => {
-      if (status !== google.maps.places.PlacesServiceStatus.OK || !results) {
-        resolve([]);
-        return;
-      }
-
-      const places = results.slice(0, 5).map(p => {
-        const plLat = p.geometry?.location?.lat() || 0;
-        const plLng = p.geometry?.location?.lng() || 0;
-        const dist  = haversine(lat, lng, plLat, plLng);
-
-        return {
-          id:       p.place_id,
-          nome:     p.name,
-          indirizzo: p.formatted_address || p.vicinity || '',
-          telefono: p.formatted_phone_number || null,
-          rating:   p.rating || null,
-          n_reviews: p.user_ratings_total || 0,
-          aperto:   p.opening_hours?.open_now ?? null,
-          tipo,
-          lat: plLat,
-          lng: plLng,
-          distanza: dist,
-          place_id: p.place_id,
-          // per recuperare il telefono serve un secondo detail call
-          _needsDetail: !p.formatted_phone_number,
-        };
-      });
-
-      // recupera telefoni mancanti (max 3 per non esaurire quote)
-      const detailPromises = places
-        .filter(p => p._needsDetail)
-        .slice(0, 3)
-        .map(p => fetchPlaceDetail(service, p));
-
-      Promise.allSettled(detailPromises).then(() => resolve(places));
-    });
-  });
-}
-
-function fetchPlaceDetail(service, place) {
-  return new Promise(resolve => {
-    service.getDetails(
-      { placeId: place.place_id, fields: ['formatted_phone_number', 'opening_hours', 'website'] },
-      (detail, status) => {
-        if (status === google.maps.places.PlacesServiceStatus.OK && detail) {
-          place.telefono    = detail.formatted_phone_number || null;
-          place.aperto      = detail.opening_hours?.isOpen?.() ?? place.aperto;
-          place.website     = detail.website || null;
-          place._needsDetail = false;
-        }
-        resolve();
-      }
-    );
-  });
-}
-
-function haversine(lat1, lng1, lat2, lng2) {
-  const R = 6371000;
-  const dLat = (lat2 - lat1) * Math.PI / 180;
-  const dLng = (lng2 - lng1) * Math.PI / 180;
-  const a = Math.sin(dLat/2)**2 +
-            Math.cos(lat1 * Math.PI/180) * Math.cos(lat2 * Math.PI/180) *
-            Math.sin(dLng/2)**2;
-  return Math.round(R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)));
-}
-
-function fmtDist(m) {
-  return m >= 1000 ? `${(m/1000).toFixed(1)} km` : `${m} m`;
-}
-
-function renderNearbyList() {
   const listEl = document.getElementById('nearby-list');
+  const cards = [];
 
-  const visible = state.nearbyPlaces.filter(p => state.nearbyFilters[p.tipo] !== false);
+  for (const [key, cfg] of Object.entries(queries)) {
+    if (!state.nearbyFilters[key]) continue;
 
-  if (!visible.length) {
+    // URL Google Maps: search centrato sulle coordinate + query
+    const mapsUrl = `https://www.google.com/maps/search/${encodeURIComponent(cfg.q)}/@${lat},${lng},14z`;
+    // URL alternativo per dispositivi mobili (apre app Maps)
+    const mapsAppUrl = `https://maps.google.com/?q=${encodeURIComponent(cfg.q)}&near=${lat},${lng}`;
+
+    cards.push(`
+      <div class="nearby-place">
+        <div class="nearby-place-header">
+          <div class="nearby-place-name">${cfg.label}</div>
+          <div class="nearby-place-type">${cfg.tipo}</div>
+        </div>
+        <div class="nearby-place-info">
+          <div class="nearby-place-addr" style="font-size:11px;color:var(--text3)">
+            Apre Google Maps con la tua posizione attuale — risultati reali con telefoni, orari e recensioni
+          </div>
+        </div>
+        <div class="nearby-actions">
+          <a class="nearby-btn map" href="${mapsUrl}" target="_blank" rel="noopener" style="flex:1;font-size:11px">
+            🗺️ Cerca su Google Maps
+          </a>
+        </div>
+      </div>`);
+  }
+
+  if (!cards.length) {
     listEl.innerHTML = `
       <div class="nearby-empty">
         <div class="ico">🔍</div>
-        <p>Nessun risultato</p>
-        <small>Prova ad attivare altri filtri o allarga la ricerca</small>
+        <p>Nessun filtro attivo</p>
+        <small>Attiva almeno una categoria</small>
       </div>`;
     return;
   }
 
-  const tipoLabel = { gommista: '🔧 Gommista', autofficina: '🛠️ Autofficina', concessionaria: '🏢 Concessionaria' };
-
-  listEl.innerHTML = visible.map(p => {
-    const stars   = p.rating ? `⭐ ${p.rating.toFixed(1)}` + (p.n_reviews ? ` (${p.n_reviews})` : '') : '';
-    const apertoHtml = p.aperto === true
-      ? '<span class="nearby-open open">● Aperto ora</span>'
-      : p.aperto === false
-        ? '<span class="nearby-open closed">● Chiuso</span>'
-        : '';
-
-    const callBtn = p.telefono
-      ? `<a class="nearby-btn call" href="tel:${p.telefono.replace(/\s/g,'')}">📞 ${p.telefono}</a>`
-      : `<span class="nearby-btn" style="opacity:.4;cursor:default">📞 Tel N/D</span>`;
-
-    const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(p.nome)}&query_place_id=${p.place_id}`;
-
-    return `
-      <div class="nearby-place">
-        <div class="nearby-place-header">
-          <div class="nearby-place-name">${p.nome}</div>
-          <div class="nearby-place-type">${tipoLabel[p.tipo] || p.tipo}</div>
-        </div>
-        <div class="nearby-place-info">
-          <div class="nearby-place-addr">${p.indirizzo}</div>
-          <div class="nearby-place-meta">
-            <span class="nearby-dist">📍 ${fmtDist(p.distanza)}</span>
-            ${stars ? `<span class="nearby-rating">${stars}</span>` : ''}
-            ${apertoHtml}
-          </div>
-        </div>
-        <div class="nearby-actions">
-          ${callBtn}
-          <a class="nearby-btn map" href="${mapsUrl}" target="_blank" rel="noopener">🗺️ Mappa</a>
-        </div>
-      </div>`;
-  }).join('');
+  listEl.innerHTML = cards.join('') + `
+    <div style="padding:12px 0 4px;font-family:var(--font-mono);font-size:9px;color:var(--text3);text-align:center;line-height:1.8">
+      Google Maps mostra telefono, orari e navigazione per ogni risultato.<br>
+      ${marca ? `Ricerca filtrata per marca: <strong style="color:var(--accent)">${marca}</strong>` : 'Aggiungi la marca veicolo in Scansione per filtrare le concessionarie.'}
+    </div>`;
 }
 
 // ── GENERA PDF ─────────────────────────────────
@@ -2597,7 +2400,6 @@ function closeModal(e) {
 // ── IMPOSTAZIONI ───────────────────────────────
 function loadSettings() {
   document.getElementById('s-gemini-key').value = ls(KEYS.gemini) || '';
-  document.getElementById('s-places-key').value = ls(KEYS.places) || '';
   document.getElementById('s-webhook').value    = ls(KEYS.webhook) || '';
   document.getElementById('s-officina').value   = ls(KEYS.officina) || '';
   document.getElementById('s-tel').value        = ls(KEYS.tel) || '';
@@ -2608,8 +2410,6 @@ function loadSettings() {
 function saveSettings() {
   const key = document.getElementById('s-gemini-key').value.trim();
   if (key) localStorage.setItem(KEYS.gemini, key);
-  const pk = document.getElementById('s-places-key').value.trim();
-  if (pk) localStorage.setItem(KEYS.places, pk);
   const wh = document.getElementById('s-webhook').value.trim();
   if (wh) localStorage.setItem(KEYS.webhook, wh);
   localStorage.setItem(KEYS.officina, document.getElementById('s-officina').value.trim());
