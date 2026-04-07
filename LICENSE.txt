@@ -1,0 +1,25 @@
+TireCheck Pro – Licenza d’Uso
+
+Copyright (c) 2026 Alessandro Pezzali – pezzaliAPP
+
+È concessa all’utente una licenza gratuita, non esclusiva e non trasferibile
+per l’utilizzo dell’applicazione TireCheck Pro.
+
+È severamente vietato:
+– Copiare, riprodurre o distribuire il codice sorgente
+– Modificare, decompilare o creare opere derivate
+– Rivendere o redistribuire l’app senza autorizzazione scritta
+
+Qualsiasi utilizzo del codice, anche parziale, deve essere preventivamente
+autorizzato per iscritto dall’autore.
+
+Nel caso venga concessa autorizzazione:
+– Deve essere sempre mantenuta la paternità dell’opera
+– Deve essere citato: Alessandro Pezzali – pezzaliAPP
+
+L’app viene fornita “così com’è”, senza garanzie di alcun tipo.
+
+Per richieste di utilizzo o licenze:
+contattare: [inserisci email o sito]
+
+Tutti i diritti riservati.
