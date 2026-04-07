@@ -1,11 +1,10 @@
-const CACHE_NAME = 'tirecheck-pro-v3';
+const CACHE_NAME = 'tirecheck-pro-v4';
 
 self.addEventListener('install', event => {
-  self.skipWaiting(); // attiva subito senza aspettare
+  self.skipWaiting();
 });
 
 self.addEventListener('activate', event => {
-  // Elimina TUTTE le cache precedenti senza eccezioni
   event.waitUntil(
     caches.keys().then(keys =>
       Promise.all(keys.map(key => caches.delete(key)))
@@ -13,10 +12,16 @@ self.addEventListener('activate', event => {
   );
 });
 
+// Risponde al messaggio "Aggiorna ora" dal banner
+self.addEventListener('message', event => {
+  if (event.data && event.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
+});
+
 self.addEventListener('fetch', event => {
   const url = event.request.url;
 
-  // API esterne: sempre rete diretta
   if (
     url.includes('generativelanguage.googleapis.com') ||
     url.includes('make.com') ||
@@ -24,10 +29,9 @@ self.addEventListener('fetch', event => {
     url.includes('fonts.gstatic.com') ||
     url.includes('cdnjs.cloudflare.com')
   ) {
-    return; // passa alla rete nativa
+    return;
   }
 
-  // index.html e root: SEMPRE dalla rete (network-first)
   if (
     url.endsWith('/') ||
     url.includes('index.html') ||
@@ -40,15 +44,14 @@ self.addEventListener('fetch', event => {
     return;
   }
 
-  // manifest.json e sw.js: network-first
   if (url.includes('manifest.json') || url.includes('sw.js')) {
     event.respondWith(
-      fetch(event.request, { cache: 'no-store' }).catch(() => caches.match(event.request))
+      fetch(event.request, { cache: 'no-store' })
+        .catch(() => caches.match(event.request))
     );
     return;
   }
 
-  // tutto il resto: network con fallback cache
   event.respondWith(
     fetch(event.request).catch(() => caches.match(event.request))
   );
